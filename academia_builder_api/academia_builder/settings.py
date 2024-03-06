@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'rest_framework', # provides a framework for building Web APIs
     'djoser', # provides a set of views to handle basic actions such as registration, login, logout, password reset and account activation
     'social_django', # allows users to sign in with their social media accounts
-    'users' # the app we created to handle user accounts
+    'users', # the app we created to handle user accounts
+    'classroom', # the app we created to handle classrooms
 
 
 
