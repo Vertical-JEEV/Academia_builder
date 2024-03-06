@@ -165,7 +165,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',# allows users to sign in with their Google account
-    'social_core.backends.facebook.FacebookOAuth2', # allows users to sign in with their Facebook account
+
     'django.contrib.auth.backends.ModelBackend', # allows users to sign in with their username and password
 ]
 
@@ -216,6 +216,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'openid' 
 ] # the scope for the Google OAuth2
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name'] # the extra data to be requested from the Google OAuth2
+
+
 
 
 
