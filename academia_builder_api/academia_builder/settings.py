@@ -228,7 +228,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 
 # connects to the next.js frontend
 CORS_ALLOWED_ORIGINS = getenv('DJANGO_CORS_ALLOWED_ORIGINS',
-                              'http://localhost:3000, http://127.0.0.1:3000').split(',') # the allowed origins for cross-origin requests
+                              'http://localhost:3000,http://127.0.0.1:3000').split(',') # the allowed origins for cross-origin requests
 
 # allows cookies to be sent with the request to the server
 CORS_ALLOW_CREDENTIALS = True
