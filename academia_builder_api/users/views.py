@@ -43,19 +43,6 @@ class CustomProviderAuthView(ProviderAuthView):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
