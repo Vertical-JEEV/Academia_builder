@@ -9,6 +9,7 @@ from rest_framework import permissions
 
 
 
+
 # makes sure the account is a teacher type
 class IsTeacher(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -21,9 +22,14 @@ class IsStudent(permissions.BasePermission):
         return request.user and request.user.account_type == 'student'
     
 
+class IsTeacherOrStudent(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user and (request.user.account_type == 'teacher' or request.user.account_type == 'student')
+    
+
 class ListClassroomsView(APIView):
     authentication_classes = [CustomJWTAuthentication]
-    permission_classes = [IsAuthenticated, IsTeacher, IsStudent]
+    permission_classes = [IsAuthenticated, IsTeacherOrStudent]
 
     # get request to list classsrooms
     def get(self, request):
@@ -46,7 +52,7 @@ class CreateClassroomView(APIView):
 
     # post request to create a classroom
     def post(self, request):
-        serializer = ClassroomSerializer(data=request.data)
+        serializer = ClassroomSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
@@ -62,17 +68,20 @@ class RenameClassroomView(APIView):
 
     # put request to rename a classroom
     def put(self, request, pk):
-        classroom = Classroom.objects.get(id = pk)
-        # makes sure that the teacher is the owner of the classroom
-        if classroom.teacher!= request.user:
-            return Response({"error": "Not authorized"}, status=403)
-        new_name = request.data.get('name')
-        # makes sure that the new name is not empty or that the new name is not the same as the old name
-        if new_name:
-            classroom.name = new_name
-            classroom.save()
-            return Response({"message": "Classroom renamed successfully"})
-        return Response({"error": "Name is required"}, status=400)
+        try:
+            classroom = Classroom.objects.get(id = pk)
+            # makes sure that the teacher is the owner of the classroom
+            if classroom.teacher!= request.user:
+                return Response({"error": "Not authorized"}, status=403)
+            new_name = request.data.get('name')
+            # makes sure that the new name is not empty or that the new name is not the same as the old name
+            if new_name:
+                classroom.name = new_name
+                classroom.save()
+                return Response({"message": "Classroom renamed successfully"})
+            return Response({"error": "Name is required"}, status=400)
+        except Classroom.DoesNotExist:
+            return Response({"error": "Classroom not found"}, status=404)
         
 
 class DeleteClassroomView(APIView):
