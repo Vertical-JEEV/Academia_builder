@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'social_django', # allows users to sign in with their social media accounts
     'users', # the app we created to handle user accounts
     'classroom', # the app we created to handle classrooms
+    'courses', # the app we created to handle courses
 
 
 
