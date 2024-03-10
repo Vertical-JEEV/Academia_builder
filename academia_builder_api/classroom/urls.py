@@ -2,6 +2,8 @@ from django.urls import path
 from .views import ListClassroomsView, CreateClassroomView, RenameClassroomView, DeleteClassroomView, RemoveStudentView ,JoinClassroomView
 
 
+
+# urlpatterns for the classroom app
 urlpatterns = [
     path('list-classrooms/', ListClassroomsView.as_view(), name='list_classrooms'),
     path('create/', CreateClassroomView.as_view(), name='create_classroom'),

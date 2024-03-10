@@ -22,6 +22,8 @@ class IsStudent(permissions.BasePermission):
         return request.user and request.user.account_type == 'student'
     
 
+
+# makes sure the account is a teacher or student type
 class IsTeacherOrStudent(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user and (request.user.account_type == 'teacher' or request.user.account_type == 'student')
@@ -105,9 +107,12 @@ class RemoveStudentView(APIView):
     authentication_classes = [CustomJWTAuthentication]
     permission_classes = [IsAuthenticated, IsTeacher]
 
+
+# removes a student from a classroom
     def delete(self, request, classroom_id, student_id):
         try:
             classroom = Classroom.objects.get(id=classroom_id)
+            # if the teacher is not the owner of the classroom, then return an error else we remove the student from the classroom and return a success message
             if classroom.teacher != request.user:
                 return Response({"error": "Not authorized"}, status=403)
             student = User.objects.get(id=student_id)
@@ -123,8 +128,12 @@ class JoinClassroomView(APIView):
     authentication_classes = [CustomJWTAuthentication]
     permission_classes = [IsAuthenticated, IsStudent]
 
+
+    # post request to join a classroom
     def post(self, request):
         unique_code = request.data.get('unique_code')
+
+        # makes sure that the unique code is not empty
         if not unique_code:
             return Response({"error": "Unique code is required"}, status=400)
         try:
