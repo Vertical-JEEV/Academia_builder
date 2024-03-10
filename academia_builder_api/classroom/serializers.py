@@ -2,7 +2,11 @@ from rest_framework import serializers
 from .models import Classroom
 from django.contrib.auth import get_user_model
 
+
 User = get_user_model()
+
+
+# serializer for the classroom model
 class ClassroomSerializer(serializers.ModelSerializer):
     students = serializers.PrimaryKeyRelatedField(many=True, required=False, queryset=User.objects.all())
     teacher = serializers.HiddenField(default=serializers.CurrentUserDefault())
