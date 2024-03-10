@@ -12,3 +12,10 @@ account_type: teacher
 email: sanjukutty13240@gmail.com
 password: ILoveMutton
 account_type: student
+
+
+
+django admin credentials for CRUD operations for courses etc
+
+email: sanju2506g@gmail.com
+password: Password
