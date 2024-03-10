@@ -39,8 +39,8 @@ class UserAccountManager(BaseUserManager):
 class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     USER_TYPE_CHOICES = (
-        ('student', 'Student'),
-        ('teacher', 'Teacher'),
+        ('student', 'Student'), # the first value is the value stored in the database, the second value is the human-readable name
+        ('teacher', 'Teacher'), # the first value is the value stored in the database, the second value is the human-readable name
     )
     # the email field is unique and it is used as the username field
     email = models.EmailField(unique=True, max_length=255)

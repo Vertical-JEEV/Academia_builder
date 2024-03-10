@@ -1,0 +1,14 @@
+
+these are account stored on the databse which will be used for testing purposes
+
+
+
+email: mersalmarcus@gmail.com
+password: SafePassword
+account_type: teacher
+
+
+
+email: sanjukutty13240@gmail.com
+password: ILoveMutton
+account_type: student
