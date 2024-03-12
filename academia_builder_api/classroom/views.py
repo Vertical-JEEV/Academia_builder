@@ -5,28 +5,11 @@ from users.authentication import CustomJWTAuthentication
 from users.models import UserAccount as User
 from .models import Classroom
 from .serializers import ClassroomSerializer
-from rest_framework import permissions
+from academia_builder.custom_permissions import IsTeacher, IsStudent, IsTeacherOrStudent
 
 
 
 
-# makes sure the account is a teacher type
-class IsTeacher(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user and request.user.account_type == 'teacher'
-    
-
-# makes sure the account is a student type
-class IsStudent(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user and request.user.account_type == 'student'
-    
-
-
-# makes sure the account is a teacher or student type
-class IsTeacherOrStudent(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user and (request.user.account_type == 'teacher' or request.user.account_type == 'student')
     
 
 class ListClassroomsView(APIView):
