@@ -28,8 +28,20 @@ class ModuleSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'subtopics']
 
 
+class QuestionSerializer(serializers.ModelSerializer):
+    subtopic = serializers.SlugRelatedField(slug_field='name', queryset = SubTopic.objects.all())
+
+    class Meta:
+        model = Question
+        fields = ['id', 'text', 'question_type', 'subtopic', 'answer']
 
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['subtopic'] = SubTopicSerializer(instance.subtopic)
+        return representation
+
+    
     
 
 
@@ -37,7 +49,3 @@ class ModuleSerializer(serializers.ModelSerializer):
 
 
 
-# serializer for :
-# list courses 
-# retrive modules and sub-topics 
-# filter quesitons by module and sub-topic of a course 
