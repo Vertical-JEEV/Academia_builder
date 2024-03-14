@@ -1,12 +1,9 @@
 from django.urls import path
 from .views import ListCoursesView, RetrieveModulesAndSubTopicsView, FilterQuestionsByModuleAndSubTopicView
 
-# urlpatterns for the courses app
-
-
 urlpatterns = [
     path('list-courses/', ListCoursesView.as_view(), name='list_courses'),
-    path('retrieve-modules-and-subtopics/<int:course_id>/', RetrieveModulesAndSubTopicsView.as_view(), name='retrieve_modules_and_subtopics'),
-    path('filter-questions-by-module-and-subtopic', FilterQuestionsByModuleAndSubTopicView.as_view(), name='filter_questions_by_module_and_subtopic'),
-
+    path('retrieve-topic-list/<int:course_id>/', RetrieveModulesAndSubTopicsView.as_view(), name='retrieve_modules_and_subtopics'),
+    path('filter-questions', FilterQuestionsByModuleAndSubTopicView.as_view(), name='filter_questions_by_module_and_subtopic'),
 ]
+
