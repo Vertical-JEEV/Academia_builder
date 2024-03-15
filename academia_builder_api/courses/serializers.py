@@ -13,6 +13,7 @@ class CourseSerializer(serializers.ModelSerializer):
         return instance.name
 
 
+
 # serializer for the sub-topic model
 class SubTopicSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,7 +39,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['subtopic'] = SubTopicSerializer(instance.subtopic)
+        representation['subtopic'] = SubTopicSerializer(instance.subtopic).data
         return representation
 
     

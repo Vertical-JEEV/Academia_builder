@@ -36,16 +36,15 @@ class FilterQuestionsByModuleAndSubTopicView(APIView):
 
     # get request to filter questions by multiple modules and multiple sub-topics of a course
     def get(self, request):
-        module_ids = request.query_params.get('module_ids', [])
-        subtopics_ids = request.query_params.get('subtopics_ids', [])
+        module_ids = request.query_params.get('module_ids', '')
+        subtopics_ids = request.query_params.get('subtopics_ids', '')
 
         # Convert ids from string to list of integers
         module_ids = list(map(int, module_ids.split(','))) if module_ids else []
-        subtopics_ids = list(map(int, subtopics_ids.split(','))) if subtopics_ids else []
+        subtopics_ids = list(map(int, filter(None, subtopics_ids.split(',')))) if subtopics_ids else []
 
         # Filter questions based on module_ids and subtopics_ids
         questions = Question.objects.filter(Q(subtopic__module_id__in=module_ids) | Q(subtopic_id__in=subtopics_ids))
-
 
         serializer = QuestionSerializer(questions, many=True)
         return Response(serializer.data)
@@ -54,5 +53,5 @@ class FilterQuestionsByModuleAndSubTopicView(APIView):
 
 
         
-        pass
+    
         
