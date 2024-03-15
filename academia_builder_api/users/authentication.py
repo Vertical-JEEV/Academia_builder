@@ -8,6 +8,7 @@ class CustomJWTAuthentication(JWTAuthentication):
         try:
             # get the header from the request
             header = self.get_header(request)
+            
 
             # if the header is None, then we get the token from the cookies
             if header is None:
