@@ -3,6 +3,7 @@ from .views import ListClassroomsView, CreateClassroomView, RenameClassroomView,
 
 
 
+
 # urlpatterns for the classroom app
 urlpatterns = [
     path('list-classrooms/', ListClassroomsView.as_view(), name='list_classrooms'),
