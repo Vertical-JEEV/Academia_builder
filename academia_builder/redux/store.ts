@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/authSlice";
-import { useAppSelector } from "./hooks";
+import { apiSlice } from "./services/apiSlice";
 
 
 // Create a store with no reducers
@@ -8,6 +8,8 @@ import { useAppSelector } from "./hooks";
 export const makeStore = () => {
     return configureStore({
         reducer: {
+            // Add the api slice to the store
+            [apiSlice.reducerPath]: apiSlice.reducer,
             // Add the auth reducer to the store
             auth: authReducer,
         },
@@ -22,3 +24,5 @@ export type RootState = ReturnType<AppStore["getState"]>;
 // AppDispatch is a type that represents the dispatch function of the store
 // dispatch is a function that sends an action to the store
 export type AppDispatch = AppStore["dispatch"];
+
+
