@@ -3,6 +3,9 @@ import authReducer from "./features/authSlice";
 import { apiSlice } from "./services/apiSlice";
 
 
+
+
+
 // Create a store with no reducers
 // a reducer is a function that determines how the state changes in response to an action
 export const makeStore = () => {
@@ -13,6 +16,9 @@ export const makeStore = () => {
             // Add the auth reducer to the store
             auth: authReducer,
         },
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().concat(apiSlice.middleware),
+        
         devTools: process.env.NODE_ENV !== "production",
     });
 }

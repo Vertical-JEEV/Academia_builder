@@ -192,7 +192,7 @@ REST_FRAMEWORK = {
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}', # the URL for the password reset confirmation
     'SEND_ACTIVATION_EMAIL': True, # send an email to the user to activate their account
-    'ACTIVATION_URL': 'activate-account/{uid}/{token}', # the URL for the account activation
+    'ACTIVATION_URL': 'activation/{uid}/{token}', # the URL for the account activation
     'USER_CREATE_PASSWORD_RETYPE': True, # require the user to retype their password when creating an account
     'PASSWORD_RESET_CONFIRM_RETYPE': True, # require the user to retype their password when resetting it
     'TOKEN_MODEL': None, # use the default token model 
