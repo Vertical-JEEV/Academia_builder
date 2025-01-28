@@ -1,5 +1,3 @@
-
-
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { LoginForm } from '@/components/forms';
@@ -9,13 +7,6 @@ export const metadata: Metadata = {
   title: 'Academia Builder | Login',
   description: 'Academia Builder login page',
 };
-
-
-
-
-
-
-
 
 
 export default function Login() {
@@ -39,9 +30,9 @@ export default function Login() {
         </div>
           <p className="mt-6 text-center text-sm text-gray-500">
             Not a member?{' '}
-            <a href="/auth/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
+            <Link href="/auth/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
                 Sign up now
-            </a>
+            </Link>
           </p>
         </div>
 
