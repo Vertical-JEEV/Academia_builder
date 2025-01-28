@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent } from "react";
+import { ChangeEvent, FormEvent, ReactNode } from "react";
 import { Input } from '@/components/forms';
 import { Select } from '@/components/forms';
 import { Spinner } from '@/components/common';
@@ -20,11 +20,12 @@ interface FormProps {
   btnText: string;
   onChange: (event: ChangeEvent<HTMLInputElement| HTMLSelectElement>) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  children?: ReactNode 
 }
 
 
 
-export default function Form({ config, isLoading, btnText, onChange, onSubmit }: FormProps) {
+export default function Form({ config, isLoading, btnText, onChange, onSubmit, children }: FormProps) {
   return (
     <form className="space-y-6" onSubmit={onSubmit}>
       {config.map(input => (
@@ -53,6 +54,7 @@ export default function Form({ config, isLoading, btnText, onChange, onSubmit }:
         )
       ))}
 
+      {children}
       <div className="mt-4">
         <button
           type="submit"
