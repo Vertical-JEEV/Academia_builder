@@ -6,10 +6,7 @@ import { useActivationMutation } from '@/redux/features/authApiSlice';
 import { toast } from 'react-toastify';
 
 interface Props {
-	params: {
-		uid: string;
-		token: string;
-	};
+  params: Promise<{ uid: string; token: string }>;
 }
 
 export default function ActivationPage({ params }: Props) {
@@ -17,7 +14,8 @@ export default function ActivationPage({ params }: Props) {
 	const [activation] = useActivationMutation();
 
 	useEffect(() => {
-		const { uid, token } = params;
+		params.then(({ uid, token }) =>{
+
 
 		activation({ uid, token })
 			.unwrap()
@@ -30,6 +28,8 @@ export default function ActivationPage({ params }: Props) {
 			.finally(() => {
 				router.push('/auth/login');
 			});
+		}
+		);
 	}, []);
 
 	return (

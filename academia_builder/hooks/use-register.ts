@@ -34,8 +34,8 @@ export default function useRegister() {
             toast.success('Please check your email to verify your account');
             router.push('/auth/login');
     })
-    .catch((error) => {
-        toast.error('Failed to register account');
+        .catch((error) => {
+            toast.error('Failed to register account');
     });
     }
 
