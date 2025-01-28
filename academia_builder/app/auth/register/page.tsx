@@ -1,10 +1,14 @@
-'use client';
-
 import Link from 'next/link';
 import { RegisterForm } from '@/components/forms';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+	title: 'Academia Builder | Register',
+	description: 'Academia Builder register page',
+};
+
 
 export default function Register() {
-  ;
   
   return (
     <>
