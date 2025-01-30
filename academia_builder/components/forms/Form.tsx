@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, ReactNode } from "react";
-import { Input } from '@/components/forms';
-import { Select } from '@/components/forms';
-import { Spinner } from '@/components/common';
+import { Input } from "@/components/forms";
+import { Select } from "@/components/forms";
+import { Spinner } from "@/components/common";
 
 interface Config {
   labelId: string;
@@ -18,16 +18,23 @@ interface FormProps {
   config: Config[];
   isLoading: boolean;
   btnText: string;
-  onChange: (event: ChangeEvent<HTMLInputElement| HTMLSelectElement>) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  children?: ReactNode 
+  children?: ReactNode;
 }
 
-export default function Form({ config, isLoading, btnText, onChange, onSubmit, children }: FormProps) {
+export default function Form({
+  config,
+  isLoading,
+  btnText,
+  onChange,
+  onSubmit,
+  children,
+}: FormProps) {
   return (
     <form className="space-y-6" onSubmit={onSubmit}>
-      {config.map(input => (
-        input.type === 'select' ? (
+      {config.map((input) =>
+        input.type === "select" ? (
           <Select
             key={input.labelId}
             labelId={input.labelId}
@@ -50,7 +57,7 @@ export default function Form({ config, isLoading, btnText, onChange, onSubmit, c
             placeholder={input.placeholder}
           />
         )
-      ))}
+      )}
       {children}
       <div className="mt-4">
         <button

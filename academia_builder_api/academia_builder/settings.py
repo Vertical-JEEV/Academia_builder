@@ -49,12 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',  # allows cross-origin requests
-    'rest_framework', # provides a framework for building Web APIs
-    'djoser', # provides a set of views to handle basic actions such as registration, login, logout, password reset and account activation
-    'social_django', # allows users to sign in with their social media accounts
-    'users', # the app we created to handle user accounts
-    'classroom', # the app we created to handle classrooms
-    'courses', # the app we created to handle courses
+    'rest_framework',  # provides a framework for building Web APIs
+    'djoser',  # provides a set of views to handle basic actions such as registration, login, logout, password reset and account activation
+    'social_django',  # allows users to sign in with their social media accounts
+    'users',  # the app we created to handle user accounts
+    'classroom',  # the app we created to handle classrooms
+    'courses',  # the app we created to handle courses
 
 
 
@@ -63,7 +63,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # allows cross-origin requests
+    'corsheaders.middleware.CorsMiddleware',  # allows cross-origin requests
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -72,7 +72,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'academia_builder.urls' # the URL configuration for the project
+ROOT_URLCONF = 'academia_builder.urls'  # the URL configuration for the project
 
 TEMPLATES = [
     {
@@ -98,24 +98,31 @@ WSGI_APPLICATION = 'academia_builder.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # use SQLite as the database, will change to PostgreSQL in production
+        # use SQLite as the database, will change to PostgreSQL in production
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
 # email settings
-EMAIL_BACKEND = 'django_ses.SESBackend' # use Amazon SES to send emails
-DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL') # the email address to send emails from
+EMAIL_BACKEND = 'django_ses.SESBackend'  # use Amazon SES to send emails
+# the email address to send emails from
+DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
 
-AWS_SES_ACCESS_KEY_ID = getenv('AWS_SES_ACCESS_KEY_ID') # the access key for the AWS account
-AWS_SES_SECRET_ACCESS_KEY = getenv('AWS_SES_SECRET_ACCESS_KEY') # the secret access key for the AWS account
-AWS_SES_REGION_NAME = getenv('AWS_SES_REGION_NAME') # the region name for the AWS account
-AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com' # the region endpoint for the AWS account
-AWS_SES_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL') # the email address to send emails from
+# the access key for the AWS account
+AWS_SES_ACCESS_KEY_ID = getenv('AWS_SES_ACCESS_KEY_ID')
+# the secret access key for the AWS account
+AWS_SES_SECRET_ACCESS_KEY = getenv('AWS_SES_SECRET_ACCESS_KEY')
+# the region name for the AWS account
+AWS_SES_REGION_NAME = getenv('AWS_SES_REGION_NAME')
+# the region endpoint for the AWS account
+AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
+# the email address to send emails from
+AWS_SES_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
 USE_SES_V2 = True
 
-DOMAIN = getenv('DOMAIN') # the domain name for the project
-SITE_NAME = 'Academia Builder' # the name of the site
+DOMAIN = getenv('DOMAIN')  # the domain name for the project
+SITE_NAME = 'Academia Builder'  # the name of the site
 
 # yt link for the back end
 # https://www.youtube.com/watch?v=2pZmxh8Tf78&t=8465s at 55:11
@@ -143,10 +150,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us' 
+LANGUAGE_CODE = 'en-us'
 
 
-TIME_ZONE = 'UTC'   
+TIME_ZONE = 'UTC'
 
 
 USE_I18N = True
@@ -164,21 +171,20 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-
 AUTHENTICATION_BACKENDS = [
-    'social_core.backends.google.GoogleOAuth2',# allows users to sign in with their Google account
+    # allows users to sign in with their Google account
+    'social_core.backends.google.GoogleOAuth2',
 
-    'django.contrib.auth.backends.ModelBackend', # allows users to sign in with their username and password
+    # allows users to sign in with their username and password
+    'django.contrib.auth.backends.ModelBackend',
 ]
-
-
-
 
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # use JWT for authentication
-        'users.authentication.CustomJWTAuthentication', # the custom JWT authentication class
+        # the custom JWT authentication class
+        'users.authentication.CustomJWTAuthentication',
     ],
 
     'DEFAULT_PERMISSION_CLASSES': [
@@ -190,44 +196,48 @@ REST_FRAMEWORK = {
 
 # DJOSER settings
 DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}', # the URL for the password reset confirmation
-    'SEND_ACTIVATION_EMAIL': True, # send an email to the user to activate their account
-    'ACTIVATION_URL': 'activation/{uid}/{token}', # the URL for the account activation
-    'USER_CREATE_PASSWORD_RETYPE': True, # require the user to retype their password when creating an account
-    'PASSWORD_RESET_CONFIRM_RETYPE': True, # require the user to retype their password when resetting it
-    'TOKEN_MODEL': None, # use the default token model 
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': getenv('REDIRECT_URLS').split(',') # the allowed redirect URIs for social authentication
+    # the URL for the password reset confirmation
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
+    # send an email to the user to activate their account
+    'SEND_ACTIVATION_EMAIL': True,
+    # the URL for the account activation
+    'ACTIVATION_URL': 'activation/{uid}/{token}',
+    # require the user to retype their password when creating an account
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    # require the user to retype their password when resetting it
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'TOKEN_MODEL': None,  # use the default token model
+    # the allowed redirect URIs for social authentication
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': getenv('REDIRECT_URLS').split(',')
 
 }
 
-AUTH_COOKIE = 'access' # the name of the cookie for the access token
-AUTH_COOKIE_ACCESS_MAX_AGE = 24*(60 ** 2)  #  24 hours 
+AUTH_COOKIE = 'access'  # the name of the cookie for the access token
+AUTH_COOKIE_ACCESS_MAX_AGE = 24*(60 ** 2)  # 24 hours
 AUTH_COOKIE_REFRESH_MAX_AGE = AUTH_COOKIE_ACCESS_MAX_AGE
 # change to True in production, it allows cookies to be sent only over HTTPS(if True)
-AUTH_COOKIE_SECURE = getenv('AUTH_COOKIE_SECURE', 'True') == 'True' 
+AUTH_COOKIE_SECURE = getenv('AUTH_COOKIE_SECURE', 'True') == 'True'
 
-AUTH_COOKIE_HTTP_ONLY = True # doesn't allow JavaScript to access the cookie
+AUTH_COOKIE_HTTP_ONLY = True  # doesn't allow JavaScript to access the cookie
 AUTH_COOKIE_PATH = '/'  # allows the cookie to be accessed from any path
 AUTH_COOKIE_SAMESITE = 'None'  # allows the cookie to be sent to any site
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY') # the client ID for the Google OAuth2
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY') # the client secret for the Google OAuth2
+# the client ID for the Google OAuth2
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
+# the client secret for the Google OAuth2
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    'https://www.googleapis.com/auth/userinfo.email',  
+    'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
-    'openid' 
-] # the scope for the Google OAuth2
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name'] # the extra data to be requested from the Google OAuth2
-
-
-
-
-
+    'openid'
+]  # the scope for the Google OAuth2
+# the extra data to be requested from the Google OAuth2
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
 
 # connects to the next.js frontend
 CORS_ALLOWED_ORIGINS = getenv('DJANGO_CORS_ALLOWED_ORIGINS',
-                              'http://localhost:3000,http://127.0.0.1:3000').split(',') # the allowed origins for cross-origin requests
+                              'http://localhost:3000,http://127.0.0.1:3000').split(',')  # the allowed origins for cross-origin requests
 
 # allows cookies to be sent with the request to the server
 CORS_ALLOW_CREDENTIALS = True
@@ -236,6 +246,6 @@ CORS_ALLOW_CREDENTIALS = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.UserAccount' # the custom user model we created
+AUTH_USER_MODEL = 'users.UserAccount'  # the custom user model we created

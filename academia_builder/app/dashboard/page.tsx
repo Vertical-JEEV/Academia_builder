@@ -1,7 +1,7 @@
 export default function CoursesPage() {
-    return[
-        <div>
-            <h1>Courses</h1>
-        </div>
-    ]
+  return [
+    <div>
+      <h1>Dashboard</h1>
+    </div>,
+  ];
 }
