@@ -8,14 +8,18 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
+
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { NavLink } from "@/components/common";
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useAppDispatch();
   const [logout] = useLogoutMutation();
+
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const handleLogout = () => {
@@ -29,16 +33,42 @@ export default function Navbar() {
       });
   };
 
-  const authLinks = (
-    <div className="text-white rounded md px-3 py-2 font-medium">
-      Auth Links
-    </div>
+  const isSelected = (path: string) => (pathname === path ? true : false);
+
+  const authLinks = (isMobile: boolean) => (
+    <>
+      <NavLink
+        isSelected={isSelected("/dashboard")}
+        isMobile={isMobile}
+        href="/dashboard"
+      >
+        Dashboard
+      </NavLink>
+
+      <NavLink isMobile={isMobile} onClick={handleLogout}>
+        Logout
+      </NavLink>
+    </>
   );
 
-  const guestLinks = (
-    <div className="text-white rounded md px-3 py-2 font-medium">
-      Guest Links
-    </div>
+  const guestLinks = (isMobile: boolean) => (
+    <>
+      <NavLink
+        isSelected={isSelected("/auth/login")}
+        isMobile={isMobile}
+        href="/auth/login"
+      >
+        Login
+      </NavLink>
+
+      <NavLink
+        isSelected={isSelected("/auth/register")}
+        isMobile={isMobile}
+        href="/auth/register"
+      >
+        Register
+      </NavLink>
+    </>
   );
 
   return (
@@ -62,16 +92,13 @@ export default function Navbar() {
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex shrink-0 items-center">
-              <Link
-                className="text-white rounded md px-3 py-2 font-medium"
-                href="/"
-              >
+              <NavLink href="/" isBanner={true}>
                 Academia Builder
-              </Link>
+              </NavLink>
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                {isAuthenticated ? authLinks : guestLinks}
+                {isAuthenticated ? authLinks(false) : guestLinks(false)}
               </div>
             </div>
           </div>
@@ -80,7 +107,7 @@ export default function Navbar() {
 
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pt-2 pb-3">
-          {isAuthenticated ? authLinks : guestLinks}
+          {isAuthenticated ? authLinks(true) : guestLinks(true)}
         </div>
       </DisclosurePanel>
     </Disclosure>
