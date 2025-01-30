@@ -23,8 +23,6 @@ interface FormProps {
   children?: ReactNode 
 }
 
-
-
 export default function Form({ config, isLoading, btnText, onChange, onSubmit, children }: FormProps) {
   return (
     <form className="space-y-6" onSubmit={onSubmit}>
@@ -53,7 +51,6 @@ export default function Form({ config, isLoading, btnText, onChange, onSubmit, c
           />
         )
       ))}
-
       {children}
       <div className="mt-4">
         <button
@@ -67,7 +64,3 @@ export default function Form({ config, isLoading, btnText, onChange, onSubmit, c
     </form>
   );
 }
-
-        
-
-

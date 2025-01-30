@@ -8,6 +8,7 @@ import {toast} from 'react-toastify';
 
 
 export default function useLogin() {
+    // Hook to handle login form
     const router = useRouter();
     const dispatch = useAppDispatch();
 
@@ -19,11 +20,14 @@ export default function useLogin() {
 
     const { email, password } = formData;
 
+    // Handle form input change, either email or password
+    // can either be a input or select element
     const onChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
     }
 
+    // Handle form submission
     const onSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         login({ email, password })
@@ -37,7 +41,6 @@ export default function useLogin() {
             toast.error('Failed to login');
         });
     }
-
     return {
         email,
         password,

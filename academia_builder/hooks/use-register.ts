@@ -4,9 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useRegisterMutation } from '@/redux/features/authApiSlice';
 import {toast} from 'react-toastify';
 
-
-
-
 export default function useRegister() {
     const router = useRouter();
     const [register, { isLoading }] = useRegisterMutation();
@@ -38,7 +35,6 @@ export default function useRegister() {
             toast.error('Failed to register account');
     });
     }
-
     return {
         first_name, 
         last_name, 
@@ -51,6 +47,3 @@ export default function useRegister() {
         onSubmit 
     };
 }
-
-    
-
