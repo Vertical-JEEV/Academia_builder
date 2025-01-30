@@ -52,7 +52,7 @@ export default function LoginForm() {
           </label>
         </div>
         <div>
-          <a href="#" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+          <a href="/password-reset" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
             Forgot password?
           </a>
         </div>

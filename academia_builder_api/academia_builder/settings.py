@@ -201,8 +201,8 @@ DJOSER = {
 }
 
 AUTH_COOKIE = 'access' # the name of the cookie for the access token
-AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 5  # 5 minutes 
-AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24  # 24 hours
+AUTH_COOKIE_ACCESS_MAX_AGE = 24*(60 ** 2)  #  24 hours 
+AUTH_COOKIE_REFRESH_MAX_AGE = AUTH_COOKIE_ACCESS_MAX_AGE
 # change to True in production, it allows cookies to be sent only over HTTPS(if True)
 AUTH_COOKIE_SECURE = getenv('AUTH_COOKIE_SECURE', 'True') == 'True' 
 
