@@ -12,6 +12,9 @@ export default function useVerify() {
       .then((data) => {
         dispatch(setAuth());
       })
+      .catch(() => {
+        dispatch(finishInitialLoad());
+      })
       .finally(() => {
         dispatch(finishInitialLoad());
       });
