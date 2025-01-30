@@ -80,6 +80,3 @@ export default function RegisterForm() {
     />
   );
 }
-
-
-

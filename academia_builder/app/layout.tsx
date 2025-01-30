@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@/styles/globals.css";
-
 import Provider from "@/redux/provider";
-
 import { Navbar, Footer } from "@/components/common";
-
 import { Setup } from "@/components/utils";
 
 const geistSans = localFont({
@@ -13,6 +10,7 @@ const geistSans = localFont({
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",

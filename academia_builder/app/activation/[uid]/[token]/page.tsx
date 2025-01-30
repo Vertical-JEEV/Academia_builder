@@ -12,11 +12,9 @@ interface Props {
 export default function ActivationPage({ params }: Props) {
 	const router = useRouter();
 	const [activation] = useActivationMutation();
-
 	useEffect(() => {
 		params.then(({ uid, token }) =>{
-
-
+		// Call the activation endpoint with the uid and token
 		activation({ uid, token })
 			.unwrap()
 			.then(() => {
@@ -28,10 +26,10 @@ export default function ActivationPage({ params }: Props) {
 			.finally(() => {
 				router.push('/auth/login');
 			});
-		}
-		);
+		});
 	}, []);
 
+	// return a loading screen while the activation is in progress
 	return (
 		<div className='flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8'>
 			<div className='sm:mx-auto sm:w-full sm:max-w-sm'>
