@@ -2,10 +2,11 @@ from django.urls import path, re_path
 
 from .views import CustomTokenObtainPairView, CustomTokenRefreshView, CustomTokenVerifyView, LogoutView, CustomProviderAuthView
 
-# 
+#
 urlpatterns = [
     re_path(
-        r'^o/(?P<provider>\S+)/$', # the URL pattern for the provider auth view
+        # the URL pattern for the provider auth view
+        r'^o/(?P<provider>\S+)/$',
         CustomProviderAuthView.as_view(),
         name='provider-auth'
     ),

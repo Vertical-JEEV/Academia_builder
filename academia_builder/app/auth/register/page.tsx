@@ -1,15 +1,13 @@
-import Link from 'next/link';
-import { RegisterForm } from '@/components/forms';
-import type { Metadata } from 'next';
+import Link from "next/link";
+import { RegisterForm } from "@/components/forms";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: 'Academia Builder | Register',
-	description: 'Academia Builder register page',
+  title: "Academia Builder | Register",
+  description: "Academia Builder register page",
 };
 
-
 export default function Register() {
-  
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -26,10 +24,13 @@ export default function Register() {
 
         <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
           <RegisterForm />
-      
+
           <p className="mt-6 text-center text-sm text-gray-500">
-            Already have an account?{' '}
-            <Link href="/auth/login" className="font-semibold text-indigo-600 hover:text-indigo-500">
+            Already have an account?{" "}
+            <Link
+              href="/auth/login"
+              className="font-semibold text-indigo-600 hover:text-indigo-500"
+            >
               Sign in here
             </Link>
           </p>

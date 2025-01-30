@@ -8,10 +8,6 @@ from .serializers import ClassroomSerializer
 from academia_builder.custom_permissions import IsTeacher, IsStudent, IsTeacherOrStudent
 
 
-
-
-    
-
 class ListClassroomsView(APIView):
     authentication_classes = [CustomJWTAuthentication]
     permission_classes = [IsAuthenticated, IsTeacherOrStudent]
@@ -29,20 +25,22 @@ class ListClassroomsView(APIView):
             serializer = ClassroomSerializer(classrooms, many=True)
             return Response(serializer.data)
 
-           
+
 # creates a classroom which will link to the teacher
 class CreateClassroomView(APIView):
-    authentication_classes = [CustomJWTAuthentication] #makes sure that the user is authenticated
-    permission_classes = [IsAuthenticated, IsTeacher]  # makes sure that the user is authenticated and is a teacher
+    # makes sure that the user is authenticated
+    authentication_classes = [CustomJWTAuthentication]
+    # makes sure that the user is authenticated and is a teacher
+    permission_classes = [IsAuthenticated, IsTeacher]
 
     # post request to create a classroom
     def post(self, request):
-        serializer = ClassroomSerializer(data=request.data, context={'request': request})
+        serializer = ClassroomSerializer(
+            data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
-
 
 
 # allows for a teacher to rename their classroom
@@ -50,13 +48,13 @@ class RenameClassroomView(APIView):
     authentication_classes = [CustomJWTAuthentication]
     permission_classes = [IsAuthenticated, IsTeacher]
 
-
     # put request to rename a classroom
+
     def put(self, request, pk):
         try:
-            classroom = Classroom.objects.get(id = pk)
+            classroom = Classroom.objects.get(id=pk)
             # makes sure that the teacher is the owner of the classroom
-            if classroom.teacher!= request.user:
+            if classroom.teacher != request.user:
                 return Response({"error": "Not authorized"}, status=403)
             new_name = request.data.get('name')
             # makes sure that the new name is not empty or that the new name is not the same as the old name
@@ -67,7 +65,7 @@ class RenameClassroomView(APIView):
             return Response({"error": "Name is required"}, status=400)
         except Classroom.DoesNotExist:
             return Response({"error": "Classroom not found"}, status=404)
-        
+
 
 class DeleteClassroomView(APIView):
     authentication_classes = [CustomJWTAuthentication]
@@ -82,9 +80,10 @@ class DeleteClassroomView(APIView):
                 return Response({"error": "Not authorized"}, status=403)
             classroom.delete()
             return Response({"message": f"Classroom with id {pk} deleted"}, status=200)
-    
+
         except Classroom.DoesNotExist:
             return Response({"error": "Classroom not found"}, status=404)
+
 
 class RemoveStudentView(APIView):
     authentication_classes = [CustomJWTAuthentication]
@@ -92,6 +91,8 @@ class RemoveStudentView(APIView):
 
 
 # removes a student from a classroom
+
+
     def delete(self, request, classroom_id, student_id):
         try:
             classroom = Classroom.objects.get(id=classroom_id)
@@ -105,14 +106,14 @@ class RemoveStudentView(APIView):
             return Response({"error": "Classroom not found"}, status=404)
         except User.DoesNotExist:
             return Response({"error": "Student not found"}, status=404)
-    
+
 
 class JoinClassroomView(APIView):
     authentication_classes = [CustomJWTAuthentication]
     permission_classes = [IsAuthenticated, IsStudent]
 
-
     # post request to join a classroom
+
     def post(self, request):
         unique_code = request.data.get('unique_code')
 
@@ -123,7 +124,7 @@ class JoinClassroomView(APIView):
             classroom = Classroom.objects.get(unique_code=unique_code)
         except Classroom.DoesNotExist:
             return Response({"error": "Invalid unique code"}, status=404)
-        
+
         classroom.students.add(request.user)
         classroom.save()
 

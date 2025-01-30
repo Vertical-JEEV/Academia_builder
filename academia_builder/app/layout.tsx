@@ -19,7 +19,8 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: "Academia Builder",
-  description: "Explore interactive courses and build your academic skills with Academia Builder",
+  description:
+    "Explore interactive courses and build your academic skills with Academia Builder",
 };
 
 export default function RootLayout({
@@ -29,14 +30,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <Provider>
           <Setup />
           <Navbar />
           <div>{children}</div>
           <Footer />
         </Provider>
-  
       </body>
     </html>
   );

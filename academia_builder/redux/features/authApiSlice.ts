@@ -1,155 +1,166 @@
-import { apiSlice } from '../services/apiSlice';
+import { apiSlice } from "../services/apiSlice";
 
 // Interface for User object
 interface User {
-    first_name: string;
-    last_name: string;
-    email: string;
-    account_type: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  account_type: string;
 }
 
 // Interface for Google authentication arguments
 interface GoogleAuthenticateArgs {
-    state: string;
-    code: string;
+  state: string;
+  code: string;
 }
 
 // Interface for Google authentication return type
 interface GoogleAuthenticateReturn {
-    success: boolean;
-    user: User;
+  success: boolean;
+  user: User;
 }
 
 // Interface for reset password arguments
 interface ResetPasswordArgs {
-    email: string;
+  email: string;
 }
 
 // Interface for login arguments, extending reset password arguments
 interface LoginArgs extends ResetPasswordArgs {
-    password: string;
+  password: string;
 }
 
 // Interface for register arguments, extending User interface
 interface RegisterArgs extends User {
-    password: string;
-    re_password: string;
+  password: string;
+  re_password: string;
 }
 
 // Interface for activation arguments
 interface ActivationArgs {
-    uid: string;
-    token: string;
+  uid: string;
+  token: string;
 }
 
 // Interface for reset password confirm arguments
 interface ResetPasswordConfirmArgs {
-    uid: string;
-    token: string;
-    new_password: string;
-    re_new_password: string;
+  uid: string;
+  token: string;
+  new_password: string;
+  re_new_password: string;
 }
 
 // Inject endpoints into the apiSlice
 const authApiSlice = apiSlice.injectEndpoints({
-    endpoints: builder => ({
-
-        // Retrieve user endpoint
-        retrieveUser: builder.query<User, void>({
-            query: () => '/users/me/',
-        }),
-        
-        // Google authenticate endpoint
-        googleAuthenticate: builder.mutation<GoogleAuthenticateReturn, GoogleAuthenticateArgs>({
-            query: ({ state, code }) => ({
-                url: `/o/google-oauth2/?state=${encodeURIComponent(state)}&code=${encodeURIComponent(code)}`,
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            }),
-        }),
-        
-        // Login endpoint
-        login: builder.mutation<void, LoginArgs>({
-            query: ({ email, password }) => ({
-                url: '/jwt/create/',
-                method: 'POST',
-                body: { email, password },
-            }),
-        }),
-        
-        // Register endpoint
-        register: builder.mutation<void, RegisterArgs>({
-            query: ({
-                first_name,
-                last_name,
-                email,
-                account_type,
-                password,
-                re_password,    
-            }) => ({
-                url: '/users/',
-                method: 'POST',
-                body: { first_name, last_name, email, account_type, password, re_password },
-            }),
-        }),
-        
-        // Verify endpoint
-        verify: builder.mutation({
-            query: () => ({
-                url: '/jwt/verify/',
-                method: 'POST',
-            }),
-        }),
-        
-        // Logout endpoint
-        logout: builder.mutation({
-            query: () => ({
-                url: '/logout/',
-                method: 'POST', 
-            }),
-        }),
-        
-        // Activation endpoint
-        activation: builder.mutation<void, ActivationArgs>({
-            query: ({ uid, token }) => ({
-                url: '/users/activation/',
-                method: 'POST',
-                body: { uid, token },
-            }),
-        }),
-        
-        // Reset password endpoint
-        resetPassword: builder.mutation<void, ResetPasswordArgs>({
-            query: email => ({
-                url: '/users/reset_password/',
-                method: 'POST',
-                body: { email },
-            }),
-        }),
-        
-        // Reset password confirm endpoint
-        resetPasswordConfirm: builder.mutation<void, ResetPasswordConfirmArgs>({
-            query: ({ uid, token, new_password, re_new_password }) => ({
-                url: '/users/reset_password_confirm/',
-                method: 'POST',
-                body: { uid, token, new_password, re_new_password },
-            }),
-        }),
+  endpoints: (builder) => ({
+    // Retrieve user endpoint
+    retrieveUser: builder.query<User, void>({
+      query: () => "/users/me/",
     }),
+
+    // Google authenticate endpoint
+    googleAuthenticate: builder.mutation<
+      GoogleAuthenticateReturn,
+      GoogleAuthenticateArgs
+    >({
+      query: ({ state, code }) => ({
+        url: `/o/google-oauth2/?state=${encodeURIComponent(
+          state
+        )}&code=${encodeURIComponent(code)}`,
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }),
+    }),
+
+    // Login endpoint
+    login: builder.mutation<void, LoginArgs>({
+      query: ({ email, password }) => ({
+        url: "/jwt/create/",
+        method: "POST",
+        body: { email, password },
+      }),
+    }),
+
+    // Register endpoint
+    register: builder.mutation<void, RegisterArgs>({
+      query: ({
+        first_name,
+        last_name,
+        email,
+        account_type,
+        password,
+        re_password,
+      }) => ({
+        url: "/users/",
+        method: "POST",
+        body: {
+          first_name,
+          last_name,
+          email,
+          account_type,
+          password,
+          re_password,
+        },
+      }),
+    }),
+
+    // Verify endpoint
+    verify: builder.mutation({
+      query: () => ({
+        url: "/jwt/verify/",
+        method: "POST",
+      }),
+    }),
+
+    // Logout endpoint
+    logout: builder.mutation({
+      query: () => ({
+        url: "/logout/",
+        method: "POST",
+      }),
+    }),
+
+    // Activation endpoint
+    activation: builder.mutation<void, ActivationArgs>({
+      query: ({ uid, token }) => ({
+        url: "/users/activation/",
+        method: "POST",
+        body: { uid, token },
+      }),
+    }),
+
+    // Reset password endpoint
+    resetPassword: builder.mutation<void, ResetPasswordArgs>({
+      query: (email) => ({
+        url: "/users/reset_password/",
+        method: "POST",
+        body: { email },
+      }),
+    }),
+
+    // Reset password confirm endpoint
+    resetPasswordConfirm: builder.mutation<void, ResetPasswordConfirmArgs>({
+      query: ({ uid, token, new_password, re_new_password }) => ({
+        url: "/users/reset_password_confirm/",
+        method: "POST",
+        body: { uid, token, new_password, re_new_password },
+      }),
+    }),
+  }),
 });
 
 // Export hooks for the endpoints
 export const {
-    useRetrieveUserQuery,
-    useGoogleAuthenticateMutation,
-    useLoginMutation,
-    useRegisterMutation,
-    useVerifyMutation,
-    useLogoutMutation,
-    useActivationMutation,
-    useResetPasswordMutation,
-    useResetPasswordConfirmMutation,
+  useRetrieveUserQuery,
+  useGoogleAuthenticateMutation,
+  useLoginMutation,
+  useRegisterMutation,
+  useVerifyMutation,
+  useLogoutMutation,
+  useActivationMutation,
+  useResetPasswordMutation,
+  useResetPasswordConfirmMutation,
 } = authApiSlice;

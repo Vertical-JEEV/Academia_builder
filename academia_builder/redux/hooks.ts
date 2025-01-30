@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux"; 
+import { useSelector, useDispatch } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux"; // TypedUseSelectorHook is a type that represents the useSelector hook which is used to access the state of the store
 import type { AppDispatch, RootState } from "./store";
 

@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent } from "react";
 
 interface SelectProps {
   labelId: string;
@@ -17,7 +17,7 @@ export default function Select({
   value,
   required = false,
   multiple = false,
-  placeholder
+  placeholder,
 }: SelectProps) {
   return (
     <div className="rounded-md shadow-sm">
@@ -35,7 +35,7 @@ export default function Select({
             {placeholder}
           </option>
         )}
-        {options.map(option => (
+        {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

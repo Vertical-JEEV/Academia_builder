@@ -1,13 +1,11 @@
-import Link from 'next/link';
-import type { Metadata } from 'next';
-import { LoginForm } from '@/components/forms';
-
+import Link from "next/link";
+import type { Metadata } from "next";
+import { LoginForm } from "@/components/forms";
 
 export const metadata: Metadata = {
-  title: 'Academia Builder | Login',
-  description: 'Academia Builder login page',
+  title: "Academia Builder | Login",
+  description: "Academia Builder login page",
 };
-
 
 export default function Login() {
   return (
@@ -24,19 +22,22 @@ export default function Login() {
           </h2>
         </div>
 
-        <div className="mt-6 sm:mx-auto
-          sm:w-full sm:max-w-sm">
+        <div
+          className="mt-6 sm:mx-auto
+          sm:w-full sm:max-w-sm"
+        >
           <LoginForm />
         </div>
-          <p className="mt-6 text-center text-sm text-gray-500">
-            Not a member?{' '}
-            <Link href="/auth/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                Sign up now
-            </Link>
-          </p>
-        </div>
-
+        <p className="mt-6 text-center text-sm text-gray-500">
+          Not a member?{" "}
+          <Link
+            href="/auth/register"
+            className="font-semibold text-indigo-600 hover:text-indigo-500"
+          >
+            Sign up now
+          </Link>
+        </p>
+      </div>
     </>
   );
 }
-

@@ -25,7 +25,7 @@ class UserAccountManager(BaseUserManager):
         Creates and saves a superuser with the given email, first name, last name, password,
         account type
         """
-        
+
         user = self.create_user(
             email,
             password=password,
@@ -40,8 +40,10 @@ class UserAccountManager(BaseUserManager):
 class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     USER_TYPE_CHOICES = (
-        ('student', 'Student'), # the first value is the value stored in the database, the second value is the human-readable name
-        ('teacher', 'Teacher'), # the first value is the value stored in the database, the second value is the human-readable name
+        # the first value is the value stored in the database, the second value is the human-readable name
+        ('student', 'Student'),
+        # the first value is the value stored in the database, the second value is the human-readable name
+        ('teacher', 'Teacher'),
     )
     # the email field is unique and it is used as the username field
     email = models.EmailField(unique=True, max_length=255)

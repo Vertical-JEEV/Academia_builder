@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useRegister } from '@/hooks';
-import { Form } from '@/components/forms';
+import { useRegister } from "@/hooks";
+import { Form } from "@/components/forms";
 
 export default function RegisterForm() {
   const {
@@ -13,61 +13,61 @@ export default function RegisterForm() {
     re_password,
     isLoading,
     onChange,
-    onSubmit
+    onSubmit,
   } = useRegister();
 
   const config = [
     {
-      labelId: 'first_name',
-      type: 'text',
+      labelId: "first_name",
+      type: "text",
       value: first_name,
       required: true,
-      autoComplete: 'given-name',
-      placeholder: 'First Name'
+      autoComplete: "given-name",
+      placeholder: "First Name",
     },
     {
-      labelId: 'last_name',
-      type: 'text',
+      labelId: "last_name",
+      type: "text",
       value: last_name,
       required: true,
-      autoComplete: 'family-name',
-      placeholder: 'Last Name'
+      autoComplete: "family-name",
+      placeholder: "Last Name",
     },
     {
-      labelId: 'email',
-      type: 'email',
+      labelId: "email",
+      type: "email",
       value: email,
       required: true,
-      autoComplete: 'email',
-      placeholder: 'Email'
+      autoComplete: "email",
+      placeholder: "Email",
     },
     {
-      labelId: 'account_type',
-      type: 'select',
+      labelId: "account_type",
+      type: "select",
       options: [
-        { value: 'teacher', label: 'Teacher' },
-        { value: 'student', label: 'Student' }
+        { value: "teacher", label: "Teacher" },
+        { value: "student", label: "Student" },
       ],
       value: account_type,
       required: true,
-      placeholder: 'Select account type'
+      placeholder: "Select account type",
     },
     {
-      labelId: 'password',
-      type: 'password',
+      labelId: "password",
+      type: "password",
       value: password,
       required: true,
-      autoComplete: 'new-password',
-      placeholder: 'Password'
+      autoComplete: "new-password",
+      placeholder: "Password",
     },
     {
-      labelId: 're_password',
-      type: 'password',
+      labelId: "re_password",
+      type: "password",
       value: re_password,
       required: true,
-      autoComplete: 'new-password',
-      placeholder: 'Confirm Password'
-    }
+      autoComplete: "new-password",
+      placeholder: "Confirm Password",
+    },
   ];
 
   return (
