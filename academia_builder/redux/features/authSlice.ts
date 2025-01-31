@@ -2,13 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface AuthState {
   isAuthenticated: boolean;
-  isloading: boolean;
+  isLoading: boolean;
 }
 
 // This is the initial state of the auth slice
 const initialState = {
   isAuthenticated: false,
-  isloading: false,
+  isLoading: false,
 } as AuthState;
 
 // This is the slice that will handle the authentication state
@@ -23,7 +23,7 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
     },
     finishInitialLoad: (state) => {
-      state.isloading = false;
+      state.isLoading = false;
     },
   },
 });

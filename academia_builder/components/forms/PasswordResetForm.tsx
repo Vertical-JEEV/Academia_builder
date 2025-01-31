@@ -21,12 +21,9 @@ export default function PasswordResetForm() {
     <Form
       config={config}
       isLoading={isLoading}
-      btnText="Reset Password"
+      btnText="Send Reset Email"
       onChange={onChange}
       onSubmit={onSubmit}
-      
     />
   );
-
 }
-
