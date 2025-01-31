@@ -43,9 +43,7 @@ interface ActivationArgs {
 }
 
 // Interface for reset password confirm arguments
-interface ResetPasswordConfirmArgs {
-  uid: string;
-  token: string;
+interface ResetPasswordConfirmArgs extends ActivationArgs {
   new_password: string;
   re_new_password: string;
 }
@@ -134,7 +132,7 @@ const authApiSlice = apiSlice.injectEndpoints({
 
     // Reset password endpoint
     resetPassword: builder.mutation<void, ResetPasswordArgs>({
-      query: (email) => ({
+      query: ({ email }) => ({
         url: "/users/reset_password/",
         method: "POST",
         body: { email },
