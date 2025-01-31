@@ -1,6 +1,5 @@
 "use client";
 
-
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -19,8 +18,8 @@ export default function Home() {
               Welcome to Academia Builder
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              This is a platform for learning and teaching.
-              Improve your skills and knowledge with our courses.
+              This is a platform for learning and teaching. Improve your skills
+              and knowledge with our courses.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link
