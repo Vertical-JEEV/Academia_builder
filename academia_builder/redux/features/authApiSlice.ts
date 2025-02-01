@@ -9,13 +9,14 @@ interface User {
 }
 
 // Interface for Google authentication arguments
-interface GoogleAuthenticateArgs {
+interface SocialAuthenticateArgs {
+  provider: string;
   state: string;
   code: string;
 }
 
 // Interface for Google authentication return type
-interface GoogleAuthenticateReturn {
+interface SocialAuthenticateReturn {
   success: boolean;
   user: User;
 }
@@ -57,14 +58,15 @@ const authApiSlice = apiSlice.injectEndpoints({
     }),
 
     // Google authenticate endpoint
-    googleAuthenticate: builder.mutation<
-      GoogleAuthenticateReturn,
-      GoogleAuthenticateArgs
+    SocialAuthenticate: builder.mutation<
+      SocialAuthenticateReturn,
+      SocialAuthenticateArgs
     >({
-      query: ({ state, code }) => ({
-        url: `/o/google-oauth2/?state=${encodeURIComponent(
+      query: ({ provider, state, code }) => ({
+        url: `/o/${provider}/?state=${encodeURIComponent(
           state
         )}&code=${encodeURIComponent(code)}`,
+
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -153,7 +155,7 @@ const authApiSlice = apiSlice.injectEndpoints({
 // Export hooks for the endpoints
 export const {
   useRetrieveUserQuery,
-  useGoogleAuthenticateMutation,
+  useSocialAuthenticateMutation,
   useLoginMutation,
   useRegisterMutation,
   useVerifyMutation,
