@@ -8,7 +8,7 @@ interface AuthState {
 // This is the initial state of the auth slice
 const initialState = {
   isAuthenticated: false,
-  isLoading: false,
+  isLoading: true,
 } as AuthState;
 
 // This is the slice that will handle the authentication state
