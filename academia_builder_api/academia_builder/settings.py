@@ -209,8 +209,24 @@ DJOSER = {
     'TOKEN_MODEL': None,  # use the default token model
     # the allowed redirect URIs for social authentication
     'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': getenv('REDIRECT_URLS').split(',')
-
 }
+
+
+SOCIAL_AUTH_PIPELINE = [
+    # the pipeline for social authentication
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    # the pipeline to save the account type of the user
+    'users.pipeline.save_account_type',
+]
+
 
 AUTH_COOKIE = 'access'  # the name of the cookie for the access token
 AUTH_COOKIE_ACCESS_MAX_AGE = 24*(60 ** 2)  # 24 hours
@@ -237,7 +253,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
 # connects to the next.js frontend
 CORS_ALLOWED_ORIGINS = getenv('DJANGO_CORS_ALLOWED_ORIGINS',
-                              'http://localhost:3000,http://127.0.0.1:3000').split(',')  # the allowed origins for cross-origin requests
+                              # the allowed origins for cross-origin requests
+                              'http://localhost:3000,http://127.0.0.1:3000').split(',')
 
 # allows cookies to be sent with the request to the server
 CORS_ALLOW_CREDENTIALS = True
