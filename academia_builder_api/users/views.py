@@ -10,7 +10,12 @@ from rest_framework_simplejwt.views import (
 )
 
 
+
+
 class CustomProviderAuthView(ProviderAuthView):
+
+    
+
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
 
