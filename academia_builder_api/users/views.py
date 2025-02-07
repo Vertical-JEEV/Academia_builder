@@ -12,19 +12,6 @@ from rest_framework_simplejwt.views import (
 
 class CustomProviderAuthView(ProviderAuthView):
     def post(self, request, *args, **kwargs):
-        # we get the account type from the request data, this is used to determine if its a student or teacher
-        VALID_ACCOUNT_TYPES = ['student', 'teacher']
-        account_type = request.data.get('account_type')
-        # if the account type is not student or teacher, then we return a 400 response
-        if account_type not in VALID_ACCOUNT_TYPES:
-            return Response(
-                {'account_type': 'This field must be either student or teacher.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        # we set the account type in the session so that we can access it later in the pipeline
-        request.session['account_type'] = account_type
-        request.session.save()
         response = super().post(request, *args, **kwargs)
 
         # if the response status code is 201, then we set the access and refresh tokens as cookies
