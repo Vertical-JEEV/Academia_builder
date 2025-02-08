@@ -13,6 +13,7 @@ interface SocialAuthenticateArgs {
   provider: string;
   state: string;
   code: string;
+  account_type?: "student" | "teacher";
 }
 
 // Interface for Google authentication return type
@@ -62,11 +63,14 @@ const authApiSlice = apiSlice.injectEndpoints({
       SocialAuthenticateReturn,
       SocialAuthenticateArgs
     >({
-      query: ({ provider, state, code }) => ({
+      query: ({ provider, state, code, account_type }) => ({
         url: `/o/${provider}/?state=${encodeURIComponent(
           state
-        )}&code=${encodeURIComponent(code)}`,
-
+        )}&code=${encodeURIComponent(code)}${
+          account_type
+            ? `&account_type=${encodeURIComponent(account_type)}`
+            : ""
+        }`,
         method: "POST",
         headers: {
           Accept: "application/json",
