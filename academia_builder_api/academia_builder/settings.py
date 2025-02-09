@@ -212,15 +212,18 @@ DJOSER = {
     
 }
 
+# SOCIAL_AUTH settings
+
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    'social_core.pipeline.user.create_user',          # Creates new users
-    # Custom step to save account_type
+    # ✅ Validate account_type BEFORE user creation
     'users.pipeline.save_account_type',
+    # ✅ User is only created if validation passes
+    'social_core.pipeline.user.create_user',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
