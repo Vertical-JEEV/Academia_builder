@@ -4,12 +4,12 @@ from .views import CustomTokenObtainPairView, CustomTokenRefreshView, CustomToke
 
 #
 urlpatterns = [
-    re_path(
-        # the URL pattern for the provider auth view
-        r'^o/(?P<provider>\S+)/$',
-        CustomProviderAuthView.as_view(),
-        name='provider-auth'
-    ),
+    # re_path(
+    #     # the URL pattern for the provider auth view
+    #     r'^o/(?P<provider>\S+)/$',
+    #     CustomProviderAuthView.as_view(),
+    #     name='provider-auth'
+    # ),
     path('jwt/create/', CustomTokenObtainPairView.as_view()),
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),

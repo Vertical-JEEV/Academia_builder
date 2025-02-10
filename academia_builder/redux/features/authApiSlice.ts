@@ -59,25 +59,26 @@ const authApiSlice = apiSlice.injectEndpoints({
     }),
 
     // Google authenticate endpoint
-    SocialAuthenticate: builder.mutation<
-      SocialAuthenticateReturn,
-      SocialAuthenticateArgs
-    >({
-      query: ({ provider, state, code, account_type }) => ({
-        url: `/o/${provider}/?state=${encodeURIComponent(
-          state
-        )}&code=${encodeURIComponent(code)}${
-          account_type
-            ? `&account_type=${encodeURIComponent(account_type)}`
-            : ""
-        }`,
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }),
-    }),
+    // SocialAuthenticate: builder.mutation<
+    //   SocialAuthenticateReturn,
+    //   SocialAuthenticateArgs
+    // >({
+    //   query: ({ provider, state, code, account_type }) => ({
+    //     url: `/o/${provider}/?state=${encodeURIComponent(
+    //       state
+    //     )}&code=${encodeURIComponent(code)}${
+    //       account_type
+    //         ? `&account_type=${encodeURIComponent(account_type)}`
+    //         : ""
+    //     }`,
+    //     method: "POST",
+    //     headers: {
+    //       Accept: "application/json",
+    //       "Content-Type": "application/x-www-form-urlencoded",
+    //     },
+    //     body: "",
+    //   }),
+    // }),
 
     // Login endpoint
     login: builder.mutation<void, LoginArgs>({
@@ -159,7 +160,7 @@ const authApiSlice = apiSlice.injectEndpoints({
 // Export hooks for the endpoints
 export const {
   useRetrieveUserQuery,
-  useSocialAuthenticateMutation,
+  //useSocialAuthenticateMutation,
   useLoginMutation,
   useRegisterMutation,
   useVerifyMutation,
@@ -169,4 +170,4 @@ export const {
   useResetPasswordConfirmMutation,
 } = authApiSlice;
 
-// testing commit
+

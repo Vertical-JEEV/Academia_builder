@@ -32,7 +32,8 @@ if path.isfile(dotenv_file):
 SECRET_KEY = getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = getenv('DJANGO_DEBUG', 'False') == 'True'
+# set DEBUG to True if DJANGO_DEBUG is set to True in the .env file
+DEBUG = getenv('DJANGO_DEBUG', 'True') == 'True'
 
 
 ALLOWED_HOSTS = getenv('DJANGO_ALLOWED_HOSTS',
@@ -191,6 +192,7 @@ REST_FRAMEWORK = {
         # only authenticated users can access the API
         'rest_framework.permissions.IsAuthenticated',
     ],
+    
 }
 
 
@@ -214,20 +216,20 @@ DJOSER = {
 
 # SOCIAL_AUTH settings
 
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.get_username',
-    # ✅ Validate account_type BEFORE user creation
-    'users.pipeline.save_account_type',
-    # ✅ User is only created if validation passes
-    'social_core.pipeline.user.create_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
-)
+# SOCIAL_AUTH_PIPELINE = (
+#     'social_core.pipeline.social_auth.social_details',
+#     'social_core.pipeline.social_auth.social_uid',
+#     'social_core.pipeline.social_auth.auth_allowed',
+#     'social_core.pipeline.social_auth.social_user',
+#     'social_core.pipeline.user.get_username',
+#     # ✅ Validate account_type BEFORE user creation
+#     'users.pipeline.save_account_type',
+#     # ✅ User is only created if validation passes
+#     'social_core.pipeline.user.create_user',
+#     'social_core.pipeline.social_auth.associate_user',
+#     'social_core.pipeline.social_auth.load_extra_data',
+#     'social_core.pipeline.user.user_details',
+# )
 
 
 # the logging configuration for debugging, remove in production
