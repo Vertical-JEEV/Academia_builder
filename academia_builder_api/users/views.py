@@ -8,45 +8,71 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
+from social_django.utils import load_strategy
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-class CustomProviderAuthView(ProviderAuthView):
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
 
-        # if the response status code is 201, then we set the access and refresh tokens as cookies
-        if response.status_code == 201:
-            access_token = response.data.get('access')
-            refresh_token = response.data.get('refresh')
 
-            response.set_cookie(
-                'access',
-                access_token,
-                max_age = settings.AUTH_COOKIE_ACCESS_MAX_AGE,
-                path = settings.AUTH_COOKIE_PATH,
-                secure = settings.AUTH_COOKIE_SECURE,
-                httponly = settings.AUTH_COOKIE_HTTP_ONLY,
-                samesite = settings.AUTH_COOKIE_SAMESITE
-            )
+# class CustomProviderAuthView(ProviderAuthView):
 
-            response.set_cookie(
-                'refresh',
-                refresh_token,
-                max_age = settings.AUTH_COOKIE_REFRESH_MAX_AGE,
-                path = settings.AUTH_COOKIE_PATH,
-                secure = settings.AUTH_COOKIE_SECURE,
-                httponly = settings.AUTH_COOKIE_HTTP_ONLY,
-                samesite = settings.AUTH_COOKIE_SAMESITE
-            )
+    
 
-        return response
+#     def post(self, request, *args, **kwargs):
+#         response = super().post(request, *args, **kwargs)
 
+#         strategy = load_strategy(request)
+#         partial_pipeline_data = strategy.session_get('partial_pipeline')
+#         logger.debug(f"Partial pipeline data: {partial_pipeline_data}")
+#         if partial_pipeline_data:
+#             logger.debug("Partial pipeline triggered successfully.")
+
+#             return Response({
+#                 "status": "pending_account_type",
+#                 "email": partial_pipeline_data.get('email'),
+#                 # ✅ Token to resume OAuth
+#                 "partial_token": partial_pipeline_data.get('token'),
+#             }, status=status.HTTP_200_OK)
+
+
+
+
+
+
+#         # if the response status code is 201, then we set the access and refresh tokens as cookies
+#         if response.status_code == 201:
+#             access_token = response.data.get('access')
+#             refresh_token = response.data.get('refresh')
+
+#             response.set_cookie(
+#                 'access',
+#                 access_token,
+#                 max_age=settings.AUTH_COOKIE_ACCESS_MAX_AGE,
+#                 path=settings.AUTH_COOKIE_PATH,
+#                 secure=settings.AUTH_COOKIE_SECURE,
+#                 httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+#                 samesite=settings.AUTH_COOKIE_SAMESITE
+#             )
+
+#             response.set_cookie(
+#                 'refresh',
+#                 refresh_token,
+#                 max_age=settings.AUTH_COOKIE_REFRESH_MAX_AGE,
+#                 path=settings.AUTH_COOKIE_PATH,
+#                 secure=settings.AUTH_COOKIE_SECURE,
+#                 httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+#                 samesite=settings.AUTH_COOKIE_SAMESITE
+#             )
+
+#         return response
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        
+
         # if the response status code is 200, then we set the access and refresh tokens as cookies
         if response.status_code == 200:
             access_token = response.data.get('access')
@@ -55,27 +81,26 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             response.set_cookie(
                 'access',
                 access_token,
-                max_age = settings.AUTH_COOKIE_ACCESS_MAX_AGE,
-                path = settings.AUTH_COOKIE_PATH,
-                secure = settings.AUTH_COOKIE_SECURE,
-                httponly = settings.AUTH_COOKIE_HTTP_ONLY,
-                samesite = settings.AUTH_COOKIE_SAMESITE
+                max_age=settings.AUTH_COOKIE_ACCESS_MAX_AGE,
+                path=settings.AUTH_COOKIE_PATH,
+                secure=settings.AUTH_COOKIE_SECURE,
+                httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+                samesite=settings.AUTH_COOKIE_SAMESITE
             )
-
 
             response.set_cookie(
                 'refresh',
                 refresh_token,
-                max_age = settings.AUTH_COOKIE_REFRESH_MAX_AGE,
-                path = settings.AUTH_COOKIE_PATH,
-                secure = settings.AUTH_COOKIE_SECURE,
-                httponly = settings.AUTH_COOKIE_HTTP_ONLY,
-                samesite = settings.AUTH_COOKIE_SAMESITE
+                max_age=settings.AUTH_COOKIE_REFRESH_MAX_AGE,
+                path=settings.AUTH_COOKIE_PATH,
+                secure=settings.AUTH_COOKIE_SECURE,
+                httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+                samesite=settings.AUTH_COOKIE_SAMESITE
             )
 
-    
             return response
-        
+
+
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         refresh_token = request.COOKIES.get('refresh')
@@ -103,11 +128,10 @@ class CustomTokenRefreshView(TokenRefreshView):
         return response
 
 
-
 class CustomTokenVerifyView(TokenVerifyView):
     def post(self, request, *args, **kwargs):
         # if the access token is present in the request, then we set it as a cookie
-        
+
         access_token = request.COOKIES.get('access')
 
         if access_token:
@@ -117,7 +141,6 @@ class CustomTokenVerifyView(TokenVerifyView):
 
 
 class LogoutView(APIView):
-
 
     # this view is used to logout the user, we delete the access and refresh tokens from the cookies.
 

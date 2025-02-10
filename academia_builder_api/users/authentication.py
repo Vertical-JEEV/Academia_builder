@@ -3,12 +3,11 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class CustomJWTAuthentication(JWTAuthentication):
-    def authenticate(self, request): 
+    def authenticate(self, request):
 
         try:
             # get the header from the request
             header = self.get_header(request)
-            
 
             # if the header is None, then we get the token from the cookies
             if header is None:
