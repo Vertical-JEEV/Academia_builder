@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { LoginForm } from "@/components/forms";
-// import { SocialButtons } from "@/components/common";
+import { SocialButtons } from "@/components/common";
 
 export const metadata: Metadata = {
   title: "Academia Builder | Login",
@@ -28,7 +28,7 @@ export default function Login() {
           sm:w-full sm:max-w-sm"
         >
           <LoginForm />
-          {/* <SocialButtons /> */}
+          <SocialButtons />
         </div>
         <p className="mt-6 text-center text-sm text-gray-500">
           Not a member?{" "}
