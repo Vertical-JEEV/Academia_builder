@@ -89,6 +89,22 @@ TEMPLATES = [
     },
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # Use `redis://`, not `http://`
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+
+
+
+
+
+
 WSGI_APPLICATION = 'academia_builder.wsgi.application'
 
 
@@ -212,21 +228,18 @@ DJOSER = {
     
 }
 
-SOCIAL_AUTH_PIPELINE = (
+
+SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    # Validate account_type BEFORE user creation
-    'users.pipeline.save_account_type',
-    # User is only created if validation passes
-    'social_core.pipeline.user.create_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
-)
 
+    # 'social_core.pipeline.user.create_user',  # DISABLED!
+
+    'users.pipeline.store_temporary_user',     # <-- Your custom step
+]
 
 
 # the logging configuration for debugging, remove in production
