@@ -189,6 +189,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTHENTICATION_BACKENDS = [
     # allows users to sign in with their Google account
     'social_core.backends.google.GoogleOAuth2',
+    # allows users to sign in with their Microsoft account
+    'social_core.backends.microsoft.MicrosoftOAuth2',
 
     # allows users to sign in with their username and password
     'django.contrib.auth.backends.ModelBackend',
@@ -284,6 +286,17 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]  # the scope for the Google OAuth2
 # the extra data to be requested from the Google OAuth2
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+
+
+# microsoft auth
+SOCIAL_AUTH_MICROSOFT_GRAPH_KEY = getenv('MICROSOFT_AUTH_KEY')
+SOCIAL_AUTH_MICROSOFT_GRAPH_SECRET = getenv('MICROSOFT_AUTH_SECRET_KEY')
+SOCIAL_AUTH_MICROSOFT_GRAPH_SCOPE = [
+    'User.Read',
+    'email',
+    'openid',
+    'profile'
+]  # the scope for the Microsoft OAuth2 
 
 
 # connects to the next.js frontend
