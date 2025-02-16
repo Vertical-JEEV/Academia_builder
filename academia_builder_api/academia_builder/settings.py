@@ -57,8 +57,6 @@ INSTALLED_APPS = [
     'classroom',  # the app we created to handle classrooms
     'courses',  # the app we created to handle courses
 
-
-
 ]
 
 MIDDLEWARE = [
@@ -90,6 +88,22 @@ TEMPLATES = [
         },
     },
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # Use `redis://`, not `http://`
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+
+
+
+
+
 
 WSGI_APPLICATION = 'academia_builder.wsgi.application'
 
@@ -175,6 +189,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTHENTICATION_BACKENDS = [
     # allows users to sign in with their Google account
     'social_core.backends.google.GoogleOAuth2',
+    # allows users to sign in with their Microsoft account
+    'social_core.backends.microsoft.MicrosoftOAuth2',
 
     # allows users to sign in with their username and password
     'django.contrib.auth.backends.ModelBackend',
@@ -214,22 +230,18 @@ DJOSER = {
     
 }
 
-# SOCIAL_AUTH settings
 
-# SOCIAL_AUTH_PIPELINE = (
-#     'social_core.pipeline.social_auth.social_details',
-#     'social_core.pipeline.social_auth.social_uid',
-#     'social_core.pipeline.social_auth.auth_allowed',
-#     'social_core.pipeline.social_auth.social_user',
-#     'social_core.pipeline.user.get_username',
-#     # ✅ Validate account_type BEFORE user creation
-#     'users.pipeline.save_account_type',
-#     # ✅ User is only created if validation passes
-#     'social_core.pipeline.user.create_user',
-#     'social_core.pipeline.social_auth.associate_user',
-#     'social_core.pipeline.social_auth.load_extra_data',
-#     'social_core.pipeline.user.user_details',
-# )
+SOCIAL_AUTH_PIPELINE = [
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+
+    # 'social_core.pipeline.user.create_user',  # DISABLED!
+
+    'users.pipeline.store_temporary_user',     # <-- Your custom step
+]
 
 
 # the logging configuration for debugging, remove in production
@@ -274,6 +286,17 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]  # the scope for the Google OAuth2
 # the extra data to be requested from the Google OAuth2
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+
+
+# microsoft auth
+SOCIAL_AUTH_MICROSOFT_GRAPH_KEY = getenv('MICROSOFT_AUTH_KEY')
+SOCIAL_AUTH_MICROSOFT_GRAPH_SECRET = getenv('MICROSOFT_AUTH_SECRET_KEY')
+SOCIAL_AUTH_MICROSOFT_GRAPH_SCOPE = [
+    'User.Read',
+    'email',
+    'openid',
+    'profile'
+]  # the scope for the Microsoft OAuth2 
 
 
 # connects to the next.js frontend

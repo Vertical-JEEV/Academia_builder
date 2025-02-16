@@ -1,4 +1,7 @@
 from django.conf import settings
+from django.core.cache import cache
+from django.contrib.auth import get_user_model
+from django.db import transaction
 from djoser.social.views import ProviderAuthView
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,69 +11,134 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
-from social_django.utils import load_strategy
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
+from .exceptions import NewUserException
+
+
 import logging
 
 logger = logging.getLogger(__name__)
+User = get_user_model()
+
+class CompleteSignupView(APIView):
+    
+    permission_classes = [AllowAny]
+    def post(self, request, *args, **kwargs):
+       
+        # "signup_token" or "token" from the front end
+        token = request.data.get("token")
+        account_type = request.data.get("account_type")
+
+        if not token or account_type not in ["student", "teacher"]:
+            return Response(
+                {"error": "Valid token and valid account_type are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Retrieve temporary user details from Redis using the token
+        user_data = cache.get(f"pending_user:{token}")
+        if not user_data:
+            return Response(
+                {"error": "No pending user found. Please restart OAuth process."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Typically, user_data would have keys like "email", "first_name", etc.
+        email = user_data.get("email")
+        if not email:
+            return Response(
+                {"error": "No email found in cached data. Something is wrong."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Create the new user in an atomic transaction
+        with transaction.atomic():
+            user, created = User.objects.get_or_create(
+                email=email,
+                defaults={
+                    "first_name": user_data.get("first_name", ""),
+                    "last_name": user_data.get("last_name", ""),
+                    "account_type": account_type
+                }
+            )
+
+            if not created:
+                return Response(
+                    {"error": "User already exists."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        # Delete temporary user details from Redis
+        cache.delete(f"pending_user:{token}")
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        refresh_token = str(refresh)
+
+        response = Response(
+            {"message": "User registration completed."}, status=status.HTTP_201_CREATED)
+        response.set_cookie(
+            "access", access_token,
+            max_age=settings.AUTH_COOKIE_ACCESS_MAX_AGE,
+            path=settings.AUTH_COOKIE_PATH,
+            secure=settings.AUTH_COOKIE_SECURE,
+            httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+            samesite=settings.AUTH_COOKIE_SAMESITE
+        )
+        response.set_cookie(
+            "refresh", refresh_token,
+            max_age=settings.AUTH_COOKIE_REFRESH_MAX_AGE,
+            path=settings.AUTH_COOKIE_PATH,
+            secure=settings.AUTH_COOKIE_SECURE,
+            httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+            samesite=settings.AUTH_COOKIE_SAMESITE
+        )
+        return response
 
 
+class CustomProviderAuthView(ProviderAuthView):
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            # If user is authenticated, set JWT tokens as cookies
+            if response.status_code == 201:
+                access_token = response.data.get('access')
+                refresh_token = response.data.get('refresh')
 
+                response.set_cookie(
+                    'access',
+                    access_token,
+                    max_age=settings.AUTH_COOKIE_ACCESS_MAX_AGE,
+                    path=settings.AUTH_COOKIE_PATH,
+                    secure=settings.AUTH_COOKIE_SECURE,
+                    httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+                    samesite=settings.AUTH_COOKIE_SAMESITE
+                )
 
-# class CustomProviderAuthView(ProviderAuthView):
+                response.set_cookie(
+                    'refresh',
+                    refresh_token,
+                    max_age=settings.AUTH_COOKIE_REFRESH_MAX_AGE,
+                    path=settings.AUTH_COOKIE_PATH,
+                    secure=settings.AUTH_COOKIE_SECURE,
+                    httponly=settings.AUTH_COOKIE_HTTP_ONLY,
+                    samesite=settings.AUTH_COOKIE_SAMESITE
+                )
+            return response
+        except NewUserException as e:
 
+           
+            return Response(
+                {'is_new': True,'token':str(e)},
+                status=status.HTTP_200_OK
+            )
     
 
-#     def post(self, request, *args, **kwargs):
-#         response = super().post(request, *args, **kwargs)
-
-#         strategy = load_strategy(request)
-#         partial_pipeline_data = strategy.session_get('partial_pipeline')
-#         logger.debug(f"Partial pipeline data: {partial_pipeline_data}")
-#         if partial_pipeline_data:
-#             logger.debug("Partial pipeline triggered successfully.")
-
-#             return Response({
-#                 "status": "pending_account_type",
-#                 "email": partial_pipeline_data.get('email'),
-#                 # ✅ Token to resume OAuth
-#                 "partial_token": partial_pipeline_data.get('token'),
-#             }, status=status.HTTP_200_OK)
-
-
-
-
-
-
-#         # if the response status code is 201, then we set the access and refresh tokens as cookies
-#         if response.status_code == 201:
-#             access_token = response.data.get('access')
-#             refresh_token = response.data.get('refresh')
-
-#             response.set_cookie(
-#                 'access',
-#                 access_token,
-#                 max_age=settings.AUTH_COOKIE_ACCESS_MAX_AGE,
-#                 path=settings.AUTH_COOKIE_PATH,
-#                 secure=settings.AUTH_COOKIE_SECURE,
-#                 httponly=settings.AUTH_COOKIE_HTTP_ONLY,
-#                 samesite=settings.AUTH_COOKIE_SAMESITE
-#             )
-
-#             response.set_cookie(
-#                 'refresh',
-#                 refresh_token,
-#                 max_age=settings.AUTH_COOKIE_REFRESH_MAX_AGE,
-#                 path=settings.AUTH_COOKIE_PATH,
-#                 secure=settings.AUTH_COOKIE_SECURE,
-#                 httponly=settings.AUTH_COOKIE_HTTP_ONLY,
-#                 samesite=settings.AUTH_COOKIE_SAMESITE
-#             )
-
-#         return response
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
+        
         response = super().post(request, *args, **kwargs)
 
         # if the response status code is 200, then we set the access and refresh tokens as cookies
@@ -99,6 +167,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             )
 
             return response
+        
 
 
 class CustomTokenRefreshView(TokenRefreshView):

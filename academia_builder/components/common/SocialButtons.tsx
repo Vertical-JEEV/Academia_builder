@@ -1,15 +1,23 @@
-// "use client";
+"use client";
 
-// import { ImGoogle } from "react-icons/im";
-// import { SocialButton } from "@/components/common";
-// import { continueGoogleAuth } from "@/utils";
+import { ImGoogle} from "react-icons/im";
+import { FaMicrosoft } from "react-icons/fa";
 
-// export default function SocialButtons() {
-//   return (
-//     <div className="flex justify-between items-center gap-2 mt-5">
-//       <SocialButton provider="google" onClick={continueGoogleAuth()}>
-//         <ImGoogle className="mr-3" /> Google Signin
-//       </SocialButton>
-//     </div>
-//   );
-// } 
+import { SocialButton } from "@/components/common";
+import { continueGoogleAuth, continueMicrosoftAuth } from "@/utils";
+
+
+export default function SocialButtons() {
+  return (
+    <div className="flex justify-between items-center gap-2 mt-5">
+      <SocialButton provider="google" onClick={continueGoogleAuth()}>
+        <ImGoogle className="mr-3" /> Google Signin
+      </SocialButton>
+
+      <SocialButton provider="microsoft" onClick={continueMicrosoftAuth()}>
+        <FaMicrosoft className="mr-3" /> Microsoft Signin
+      </SocialButton>
+        
+    </div>
+  );
+} 
