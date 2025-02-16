@@ -13,7 +13,6 @@ interface SocialAuthenticateArgs {
   provider: string;
   state: string;
   code: string;
-  account_type?: "student" | "teacher" ;
 }
 
 // Interface for Google authentication return type
@@ -21,6 +20,13 @@ interface SocialAuthenticateReturn {
   success: boolean;
   user: User;
 }
+
+interface CompleteSignupArgs {
+  token: string;
+  account_type: "student" | "teacher";
+}
+
+
 
 // Interface for reset password arguments
 interface ResetPasswordArgs {
@@ -63,10 +69,10 @@ const authApiSlice = apiSlice.injectEndpoints({
       SocialAuthenticateReturn,
       SocialAuthenticateArgs
     >({
-      query: ({ provider, state, code, account_type }) => ({
+      query: ({ provider, state, code, }) => ({
         url: `/o/${provider}/?state=${encodeURIComponent(
           state
-        )}&code=${encodeURIComponent(code)}${account_type ? `&account_type=${encodeURIComponent(account_type)}` : ""}`,
+        )}&code=${encodeURIComponent(code)}`,
         
         method: "POST",
         headers: {
@@ -75,6 +81,19 @@ const authApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+
+    // Complete signup endpoint
+    completeSignup: builder.mutation<void, CompleteSignupArgs>({
+      query: ({ token, account_type }) => ({
+        url: "/users/complete_signup/",
+        method: "POST",
+        body: { token, account_type },
+      }),
+    }),
+
+
+
+
 
     // Login endpoint
     login: builder.mutation<void, LoginArgs>({
@@ -157,6 +176,7 @@ const authApiSlice = apiSlice.injectEndpoints({
 export const {
   useRetrieveUserQuery,
   useSocialAuthenticateMutation,
+  useCompleteSignupMutation,
   useLoginMutation,
   useRegisterMutation,
   useVerifyMutation,
