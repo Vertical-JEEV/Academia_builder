@@ -85,7 +85,7 @@ const authApiSlice = apiSlice.injectEndpoints({
     // Complete signup endpoint
     completeSignup: builder.mutation<void, CompleteSignupArgs>({
       query: ({ token, account_type }) => ({
-        url: "/users/complete_signup/",
+        url: "/complete-signup/",
         method: "POST",
         body: { token, account_type },
       }),
