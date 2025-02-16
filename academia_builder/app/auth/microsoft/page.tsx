@@ -1,0 +1,16 @@
+"use client";
+
+import { useSocialAuthenticateMutation } from "@/redux/features/authApiSlice";
+import { useSocialAuth } from "@/hooks";
+import { Spinner } from "@/components/common";
+
+export default function Page() {
+  const [microsoftAuthenticate] = useSocialAuthenticateMutation();
+  useSocialAuth(microsoftAuthenticate, "microsoft-graph");
+
+  return (
+    <div className="flex justify-center my-8">
+      <Spinner lg />
+    </div>
+  );
+}
