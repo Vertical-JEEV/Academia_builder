@@ -13,7 +13,6 @@ interface SocialAuthenticateArgs {
   provider: string;
   state: string;
   code: string;
-  account_type?: "student" | "teacher";
 }
 
 // Interface for Google authentication return type
@@ -21,6 +20,13 @@ interface SocialAuthenticateReturn {
   success: boolean;
   user: User;
 }
+
+interface CompleteSignupArgs {
+  token: string;
+  account_type: "student" | "teacher";
+}
+
+
 
 // Interface for reset password arguments
 interface ResetPasswordArgs {
@@ -58,27 +64,36 @@ const authApiSlice = apiSlice.injectEndpoints({
       query: () => "/users/me/",
     }),
 
-    // Google authenticate endpoint
-    // SocialAuthenticate: builder.mutation<
-    //   SocialAuthenticateReturn,
-    //   SocialAuthenticateArgs
-    // >({
-    //   query: ({ provider, state, code, account_type }) => ({
-    //     url: `/o/${provider}/?state=${encodeURIComponent(
-    //       state
-    //     )}&code=${encodeURIComponent(code)}${
-    //       account_type
-    //         ? `&account_type=${encodeURIComponent(account_type)}`
-    //         : ""
-    //     }`,
-    //     method: "POST",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/x-www-form-urlencoded",
-    //     },
-    //     body: "",
-    //   }),
-    // }),
+    //Google authenticate endpoint
+    SocialAuthenticate: builder.mutation<
+      SocialAuthenticateReturn,
+      SocialAuthenticateArgs
+    >({
+      query: ({ provider, state, code, }) => ({
+        url: `/o/${provider}/?state=${encodeURIComponent(
+          state
+        )}&code=${encodeURIComponent(code)}`,
+        
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }),
+    }),
+
+    // Complete signup endpoint
+    completeSignup: builder.mutation<void, CompleteSignupArgs>({
+      query: ({ token, account_type }) => ({
+        url: "/complete-signup/",
+        method: "POST",
+        body: { token, account_type },
+      }),
+    }),
+
+
+
+
 
     // Login endpoint
     login: builder.mutation<void, LoginArgs>({
@@ -160,7 +175,8 @@ const authApiSlice = apiSlice.injectEndpoints({
 // Export hooks for the endpoints
 export const {
   useRetrieveUserQuery,
-  //useSocialAuthenticateMutation,
+  useSocialAuthenticateMutation,
+  useCompleteSignupMutation,
   useLoginMutation,
   useRegisterMutation,
   useVerifyMutation,
