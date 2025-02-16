@@ -4,7 +4,8 @@ import { ImGoogle} from "react-icons/im";
 import { FaMicrosoft } from "react-icons/fa";
 
 import { SocialButton } from "@/components/common";
-import { continueGoogleAuth } from "@/utils";
+import { continueGoogleAuth, continueMicrosoftAuth } from "@/utils";
+
 
 export default function SocialButtons() {
   return (
@@ -13,7 +14,7 @@ export default function SocialButtons() {
         <ImGoogle className="mr-3" /> Google Signin
       </SocialButton>
 
-      <SocialButton provider="microsoft">
+      <SocialButton provider="microsoft" onClick={continueMicrosoftAuth()}>
         <FaMicrosoft className="mr-3" /> Microsoft Signin
       </SocialButton>
         
