@@ -50,7 +50,7 @@ class RenameClassroomView(APIView):
 
     # put request to rename a classroom
 
-    def put(self, request, pk):
+    def patch(self, request, pk):
         try:
             classroom = Classroom.objects.get(id=pk)
             # makes sure that the teacher is the owner of the classroom
