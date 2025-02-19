@@ -26,7 +26,7 @@ class ClassroomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Classroom
-        fields = ['name', 'teacher', 'students', 'course', 'unique_code']
+        fields = ['id','name', 'teacher', 'students', 'course', 'unique_code']
 
     def validate_course(self, value):
         # check if the course exists
