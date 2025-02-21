@@ -33,7 +33,7 @@ SECRET_KEY = getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # set DEBUG to True if DJANGO_DEBUG is set to True in the .env file
-DEBUG = getenv('DJANGO_DEBUG', 'True') == 'True'
+DEBUG = getenv('DJANGO_DEBUG', 'False') == 'True'
 
 
 ALLOWED_HOSTS = getenv('DJANGO_ALLOWED_HOSTS',
