@@ -14,6 +14,7 @@ from rest_framework_simplejwt.views import (
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from .exceptions import NewUserException
+from .serializers import CustomTokenObtainPairSerializer
 
 
 import logging
@@ -145,14 +146,18 @@ class CustomProviderAuthView(ProviderAuthView):
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
     def post(self, request, *args, **kwargs):
 
         response = super().post(request, *args, **kwargs)
+        logger.debug(f"{response.data}\n")
 
         # if the response status code is 200, then we set the access and refresh tokens as cookies
         if response.status_code == 200:
             access_token = response.data.get('access')
             refresh_token = response.data.get('refresh')
+            
 
             response.set_cookie(
                 'access',
@@ -173,6 +178,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 httponly=settings.AUTH_COOKIE_HTTP_ONLY,
                 samesite=settings.AUTH_COOKIE_SAMESITE
             )
+            
 
             return response
 
