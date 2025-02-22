@@ -13,14 +13,14 @@ const coursesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     listCourses: builder.query<void, void>({
       query: () => ({
-        url: `courses/list-courses/`,
+        url: `/courses/list-courses/`,
         method: "GET",
       }),
     }),
 
     listModulesAndSubtopics: builder.query<void, ListModulesArgs>({
       query: ({ course_id }) => ({
-        url: `courses/retrieve-topic-list/${course_id}/`,
+        url: `/courses/retrieve-topic-list/${course_id}/`,
         method: "GET",
       }),
     }),
@@ -35,7 +35,7 @@ const coursesApiSlice = apiSlice.injectEndpoints({
           params.append('subtopics_ids', subtopic_id.join(','));
         }
         return {
-          url: `courses/filter-questions/${course_id}/?${params.toString()}`,
+          url: `/courses/filter-questions/${course_id}/?${params.toString()}`,
           method: "GET",
         };
       },

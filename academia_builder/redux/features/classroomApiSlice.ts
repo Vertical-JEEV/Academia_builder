@@ -32,7 +32,7 @@ const classroomApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createClassroom: builder.mutation<void, CreateClassroomArgs>({
       query: ({ name, course }) => ({
-        url: `classroom/create/`,
+        url: `/classroom/create/`,
         method: "POST",
         body: { name, course },
       }),
