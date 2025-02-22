@@ -7,10 +7,11 @@ import { Spinner } from "@/components/common";
 
 interface Props {
   children: React.ReactNode;
+  allowedAccountTypes: string[];
 }
 
-export default function RequireAuth({ children }: Props) {
-  const { isLoading, isAuthenticated } = useAppSelector(state => state.auth);
+export default function RequireAuth({ children, allowedAccountTypes }: Props) {
+  const { isLoading, isAuthenticated, accountType } = useAppSelector(state => state.auth);
   // console.log("isLoading", isLoading);
   // console.log("isAuthenticated", isAuthenticated);
   
@@ -23,7 +24,7 @@ export default function RequireAuth({ children }: Props) {
       </div>
     );
   }
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !allowedAccountTypes.includes(accountType)) {
       redirect("/unauthorized");
   }
 

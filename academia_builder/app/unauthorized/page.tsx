@@ -4,7 +4,7 @@ export default function Unauthorized() {
   return (
     <MessagePage
       title="Unauthorized"
-      message="Bruv login if you want to see this page."
+      message="You are not authorized to view this page."
     />
   );
 }
