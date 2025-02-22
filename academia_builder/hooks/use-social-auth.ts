@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
-import { setAuth } from "@/redux/features/authSlice";
+import { setAuth, setAccountType } from "@/redux/features/authSlice";
 import { useCompleteSignupMutation } from "@/redux/features/authApiSlice";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ export default function useSocialAuth(authenticate: any, provider: string) {
   const searchParams = useSearchParams();
   const effectRan = useRef(false);
   const [completeSignup] = useCompleteSignupMutation();
+
 
   useEffect(() => {
     const state = searchParams.get("state");
@@ -27,6 +28,7 @@ export default function useSocialAuth(authenticate: any, provider: string) {
             return
           } else {
             dispatch(setAuth());
+            dispatch(setAccountType(response.account_type));
             toast.success("Logged in");
             router.push("/dashboard");
           }
@@ -52,8 +54,9 @@ export default function useSocialAuth(authenticate: any, provider: string) {
 
     completeSignup({ token, account_type: accountType })
       .unwrap()
-      .then(() => {
+      .then((response: any) => {
         dispatch(setAuth());
+        dispatch(setAccountType(response.account_type));
         Cookies.remove("signup_token");
         toast.success("Signed up successfully");
         router.push("/dashboard");

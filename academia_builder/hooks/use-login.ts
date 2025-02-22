@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
-import { setAuth } from "@/redux/features/authSlice";
+import { setAuth, setAccountType } from "@/redux/features/authSlice";
 import { useLoginMutation } from "@/redux/features/authApiSlice";
 import { toast } from "react-toastify";
 
@@ -32,8 +32,9 @@ export default function useLogin() {
     event.preventDefault();
     login({ email, password })
       .unwrap()
-      .then((data) => {
+      .then((response: any) => {
         dispatch(setAuth());
+        dispatch(setAccountType(response.account_type));
         toast.success("Login successful");
         router.push("/dashboard");
       })
