@@ -4,5 +4,7 @@ interface Props {
 }
 
 export default function Layout({ children }: Props) {
-  return <RequireAuth>{children}</RequireAuth>;
+  return (
+    <RequireAuth allowedAccountTypes={["teacher"]}>{children}</RequireAuth>
+  );
 }
