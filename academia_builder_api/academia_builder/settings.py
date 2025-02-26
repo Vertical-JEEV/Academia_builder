@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework',  # provides a framework for building Web APIs
     'djoser',  # provides a set of views to handle basic actions such as registration, login, logout, password reset and account activation
     'social_django',  # allows users to sign in with their social media accounts
+    'django_celery_beat',  # allows us to schedule tasks
     'users',  # the app we created to handle user accounts
     'classroom',  # the app we created to handle classrooms
     'courses',  # the app we created to handle courses
@@ -98,6 +99,13 @@ CACHES = {
         }
     }
 }
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/London'
 
 
 
@@ -168,7 +176,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/London'
 
 
 USE_I18N = True

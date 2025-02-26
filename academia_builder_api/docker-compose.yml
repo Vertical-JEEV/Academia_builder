@@ -1,6 +1,31 @@
 version: '3.8'
 
 services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  beat:
+    build: .
+    command: celery -A academia_builder beat -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    env_file:
+      - .env.local
+
+  worker:
+    build: .
+    command: celery -A academia_builder worker -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    env_file:
+      - .env.local
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -12,8 +37,5 @@ services:
       - .env.local
     depends_on:
       - redis
-
-  redis:
-    image: "redis:alpine"
-    ports:
-      - "6379:6379"
+      - beat
+      - worker
