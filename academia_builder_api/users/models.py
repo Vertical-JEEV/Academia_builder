@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.utils import timezone
 
 
 class UserAccountManager(BaseUserManager):
@@ -13,6 +14,7 @@ class UserAccountManager(BaseUserManager):
         email = email.lower()
         user = self.model(
             email=email,
+            date_joined=timezone.now(),
             **kwargs
         )
 
@@ -50,7 +52,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     account_type = models.CharField(max_length=255, choices=USER_TYPE_CHOICES)
-
+    date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
