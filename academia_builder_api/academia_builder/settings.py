@@ -90,6 +90,8 @@ TEMPLATES = [
     },
 ]
 
+
+# redis cache settings
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
@@ -100,16 +102,14 @@ CACHES = {
     }
 }
 
+# celery settings
+
 CELERY_BROKER_URL = 'redis://redis_db:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis_db:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/London'
-
-
-
-
 
 
 
@@ -177,8 +177,6 @@ LANGUAGE_CODE = 'en-us'
 
 
 TIME_ZONE = 'Europe/London'
-
-
 USE_I18N = True
 
 USE_TZ = True
@@ -245,10 +243,7 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-
-    # 'social_core.pipeline.user.create_user',  # DISABLED!
-
-    'users.pipeline.store_temporary_user',     # <-- Your custom step
+    'users.pipeline.store_temporary_user',     # store the temporary user
 ]
 
 
