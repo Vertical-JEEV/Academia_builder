@@ -55,7 +55,7 @@ const classroomApiSlice = apiSlice.injectEndpoints({
 
     joinStudent: builder.mutation<void, JoinStudentArgs>({
       query: ({ unique_code }) => ({
-        url: `classroom/join/`,
+        url: `/classroom/join-student/`,
         method: "POST",
         body: { unique_code },
       }),
