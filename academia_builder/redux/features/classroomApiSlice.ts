@@ -40,14 +40,14 @@ const classroomApiSlice = apiSlice.injectEndpoints({
 
     deleteClassroom: builder.mutation<void, DeleteClassroomArgs>({
       query: ({ id }) => ({
-        url: `classroom/delete/${id}/`,
+        url: `/classroom/delete/${id}/`,
         method: "DELETE",
       }),
     }),
 
     renameClassroom: builder.mutation<void, RenameClassroomArgs>({
       query: ({ id, name }) => ({
-        url: `classroom/rename/${id}/`,
+        url: `/classroom/rename/${id}/`,
         method: "PATCH",
         body: { name },
       }),
@@ -63,13 +63,13 @@ const classroomApiSlice = apiSlice.injectEndpoints({
 
     removeStudent: builder.mutation<void, RemoveStudentArgs>({
       query: ({ classroom_id, student_id }) => ({
-        url: `classroom/${classroom_id}/remove/${student_id}/`,
+        url: `/classroom/${classroom_id}/remove/${student_id}/`,
         method: "DELETE",
       }),
     }),
 
     listClassrooms: builder.query<Classroom, void>({
-      query: () => `classroom/list-classrooms/`,
+      query: () => `/classroom/list-classrooms/`,
     }),
   }),
 });
