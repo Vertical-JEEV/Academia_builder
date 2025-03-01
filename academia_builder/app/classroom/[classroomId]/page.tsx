@@ -9,7 +9,7 @@ interface Props {
   params: Promise<{ classroomId: number }>;
 }
 
-export default function ActivationPage({ params }: Props) {
+export default function ClassroomPage({ params }: Props) {
   const router = useRouter();
   const [classroomId, setClassroomId] = useState<number | null>(null);
   const accountType = useSelector((state: RootState) => state.auth.accountType);
