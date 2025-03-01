@@ -3,6 +3,7 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 
+# set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'academia_builder.settings')
 
 app = Celery('academia_builder')
@@ -11,6 +12,7 @@ app.autodiscover_tasks()
 
 app.conf.timezone = 'Europe/London'
 
+# Schedule tasks to delete users at midnight
 app.conf.beat_schedule = {
     'delete-inactive-users-at-midnight': {
         'task': 'users.tasks.delete_inactive_users',

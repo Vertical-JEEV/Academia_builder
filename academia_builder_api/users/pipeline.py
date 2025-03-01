@@ -18,7 +18,7 @@ def store_temporary_user(backend, details, response, *args, **kwargs):
     """
     email = details.get("email")
     if not email:
-        # No email => can't do much, so raise forbidden or handle differently
+        # No email so raise exception
         raise NoEmailException("No email found in OAuth response.")
 
     user = User.objects.filter(email=email).first()
