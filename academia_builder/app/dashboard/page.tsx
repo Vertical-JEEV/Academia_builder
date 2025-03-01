@@ -1,14 +1,20 @@
 "use client";
 
+import{useEffect} from "react";
 import { useListClassroomsQuery } from "@/redux/features/classroomApiSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
-  const { data: classrooms, isLoading, error } = useListClassroomsQuery();
+  const { data: classrooms, isLoading, error, refetch } = useListClassroomsQuery();
   const accountType = useSelector((state: RootState) => state.auth.accountType);
   const router = useRouter();
+
+  useEffect(() => {
+    refetch();
+  }, [router]);
+
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading classrooms</div>;
@@ -33,7 +39,7 @@ export default function DashboardPage() {
         </button>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {classrooms.map((classroom) => (
+        {Array.isArray(classrooms) && classrooms.map((classroom) => (
           <div
             key={classroom.id}
             className="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"

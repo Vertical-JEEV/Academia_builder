@@ -12,7 +12,7 @@ app.autodiscover_tasks()
 app.conf.timezone = 'Europe/London'
 
 app.conf.beat_schedule = {
-    'delete-inactive-users-every-5-minutes': {
+    'delete-inactive-users-at-midnight': {
         'task': 'users.tasks.delete_inactive_users',
         'schedule': crontab(hour=0, minute=0), # every day at midnight
     },

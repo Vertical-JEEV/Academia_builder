@@ -8,6 +8,7 @@ import { Spinner } from "@/components/common";
 interface Props {
   children: React.ReactNode;
   allowedAccountTypes: string[];
+
 }
 
 export default function RequireAuth({ children, allowedAccountTypes }: Props) {
@@ -24,7 +25,7 @@ export default function RequireAuth({ children, allowedAccountTypes }: Props) {
       </div>
     );
   }
-  if (!isAuthenticated || !allowedAccountTypes.includes(accountType)) {
+  if (!isAuthenticated || !accountType || !allowedAccountTypes.includes(accountType)) {
       redirect("/unauthorized");
   }
 
