@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { useJoinStudent } from "@/hooks";
 
 interface Props {
   params: Promise<{ classroomId: number }>;
@@ -13,6 +14,7 @@ export default function ClassroomPage({ params }: Props) {
   const router = useRouter();
   const [classroomId, setClassroomId] = useState<number | null>(null);
   const accountType = useSelector((state: RootState) => state.auth.accountType);
+  const { isLoading, onSubmit } = useJoinStudent();
 
   useEffect(() => {
     params.then(({ classroomId }) => {
@@ -42,4 +44,3 @@ export default function ClassroomPage({ params }: Props) {
     </div>
   );
 }
-
