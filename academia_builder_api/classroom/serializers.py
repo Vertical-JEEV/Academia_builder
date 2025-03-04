@@ -1,3 +1,4 @@
+# serializers.py
 from rest_framework import serializers
 from .models import Classroom
 from courses.models import Course
@@ -6,30 +7,58 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-# course serializers for making sure teacher enters a valid course
-class CourseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ['name']
+class DynamicFieldsModelSerializer(serializers.ModelSerializer):
+    """
+    A ModelSerializer that takes an additional `fields` argument that
+    controls which fields should be displayed.
+    """
 
-    def to_representation(self, instance):
-        return instance.name
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        fields = kwargs.pop('fields', None)
+
+        # Instantiate the superclass normally
+        super().__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not in the `fields` list.
+            allowed = set(fields)
+            existing = set(self.fields.keys())
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
 
 
-class ClassroomSerializer(serializers.ModelSerializer):
+class ClassroomSerializer(DynamicFieldsModelSerializer):
     students = serializers.PrimaryKeyRelatedField(
-        many=True, required=False, queryset=User.objects.all())
-    teacher = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    # slugrelatedfield is used to get the name of the course instead of the id
+        many=True, required=False, queryset=User.objects.all()
+    )
+    teacher = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), default=serializers.CurrentUserDefault()
+    )
+    teacher_name = serializers.SerializerMethodField()
     course = serializers.SlugRelatedField(
-        slug_field='name', queryset=Course.objects.all())
+        slug_field='name', queryset=Course.objects.all()
+    )
 
     class Meta:
         model = Classroom
-        fields = ['id','name', 'teacher', 'students', 'course', 'unique_code']
+        fields = [
+            'id',
+            'name',
+            'teacher',
+            'teacher_name',
+            'students',
+            'course',
+            'unique_code'
+        ]
+
+    def get_teacher_name(self, obj):
+        return (
+            f"{obj.teacher.first_name} {obj.teacher.last_name}"
+            if obj.teacher else None
+        )
 
     def validate_course(self, value):
-        # check if the course exists
         if not value:
             raise serializers.ValidationError('A course must be selected.')
         return value

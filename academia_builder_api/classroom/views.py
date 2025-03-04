@@ -8,22 +8,83 @@ from .serializers import ClassroomSerializer
 from academia_builder.custom_permissions import IsTeacher, IsStudent, IsTeacherOrStudent
 
 
+TEACHER_ALLOWED_FIELDS = {
+    'id',
+    'name',
+    'teacher',
+    'teacher_name',
+    'students',
+    'course',
+    'unique_code',
+}
+
+STUDENT_ALLOWED_FIELDS = {
+    'id',
+    'name',
+    'teacher_name',
+    'course',
+}
+
+
 class ListClassroomsView(APIView):
     authentication_classes = [CustomJWTAuthentication]
     permission_classes = [IsAuthenticated, IsTeacherOrStudent]
 
-    # get request to list classsrooms
+    @staticmethod
+    def parse_and_validate_fields(account_type, fields_param):
+        """
+        1) Determine allowed fields by account_type.
+        2) Parse the ?fields= param into a list.
+        3) Check if any requested fields are outside of the allowed set.
+        4) Return either (fields_list, None) if valid, or (None, error_dict) if unauthorized.
+        """
+        # Determine the allowed fields
+        if account_type == 'teacher':
+            allowed_fields = TEACHER_ALLOWED_FIELDS
+        else:
+            allowed_fields = STUDENT_ALLOWED_FIELDS
+
+        # Parse the requested fields or default to the entire allowed set
+        if fields_param:
+            requested_fields = [f.strip() for f in fields_param.split(',')]
+        else:
+            requested_fields = list(allowed_fields)
+
+        # Check for disallowed fields
+        disallowed = set(requested_fields) - allowed_fields
+        if disallowed:
+            # Return None for fields, plus an error dict
+            return None, {
+                "error": f"Unauthorized fields requested"
+            }
+
+        # Otherwise, return the valid fields list and no error
+        return requested_fields, None
+
     def get(self, request):
-        # if the user is a teacher, then return the classrooms taught by the teacher
+        fields_param = request.query_params.get('fields')
+
+        # This method either returns (fields_list, None) or (None, error_dict)
+        requested_fields, error = self.parse_and_validate_fields(
+            request.user.account_type,
+            fields_param
+        )
+
+        if error:
+            return Response(error, status=403)
+
+        # Once fields are valid, proceed with the rest of your logic
         if request.user.account_type == 'teacher':
             classrooms = Classroom.objects.filter(teacher=request.user)
-            serializer = ClassroomSerializer(classrooms, many=True)
-            return Response(serializer.data)
-        # if the user is a student, then return the classrooms attended by the student
-        elif request.user.account_type == 'student':
+        else:  # student
             classrooms = request.user.classes_attended.all()
-            serializer = ClassroomSerializer(classrooms, many=True)
-            return Response(serializer.data)
+
+        serializer = ClassroomSerializer(
+            classrooms,
+            many=True,
+            fields=requested_fields
+        )
+        return Response(serializer.data)
 
 
 # creates a classroom which will link to the teacher
