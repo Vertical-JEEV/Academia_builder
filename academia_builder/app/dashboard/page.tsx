@@ -5,11 +5,16 @@ import { useListClassroomsQuery } from "@/redux/features/classroomApiSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
-import useJoinStudent from "@/hooks/use-join-student";
+import { useJoinStudent } from "@/hooks";
 
 export default function DashboardPage() {
   const fields = ["id", "name", "course"];
-  const { data: classrooms, isLoading, error, refetch } = useListClassroomsQuery({fields});
+  const {
+    data: classrooms,
+    isLoading,
+    error,
+    refetch,
+  } = useListClassroomsQuery({ fields });
   const accountType = useSelector((state: RootState) => state.auth.accountType);
   const router = useRouter();
   const { isLoading: isJoining, onSubmit } = useJoinStudent();
@@ -52,7 +57,10 @@ export default function DashboardPage() {
       )}
       {accountType === "student" && (
         <form onSubmit={handleUniqueCodeSubmit} className="mb-6">
-          <label className="block text-lg font-medium mb-2" htmlFor="uniqueCode">
+          <label
+            className="block text-lg font-medium mb-2"
+            htmlFor="uniqueCode"
+          >
             Enter Unique Code
           </label>
           <input
@@ -72,16 +80,17 @@ export default function DashboardPage() {
         </form>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {Array.isArray(classrooms) && classrooms.map((classroom) => (
-          <div
-            key={classroom.id}
-            className="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
-            onClick={() => handleTileClick(classroom.id)}
-          >
-            <h2 className="text-xl font-semibold mb-2">{classroom.name}</h2>
-            <p className="text-gray-600">{classroom.course}</p>
-          </div>
-        ))}
+        {Array.isArray(classrooms) &&
+          classrooms.map((classroom) => (
+            <div
+              key={classroom.id}
+              className="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => handleTileClick(classroom.id)}
+            >
+              <h2 className="text-xl font-semibold mb-2">{classroom.name}</h2>
+              <p className="text-gray-600">{classroom.course}</p>
+            </div>
+          ))}
       </div>
     </div>
   );

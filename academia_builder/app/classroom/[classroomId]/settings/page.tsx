@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useListClassroomsQuery } from "@/redux/features/classroomApiSlice";
+import { useClassroomAuth } from "@/hooks"; // <--- your new custom hook
 
 /** Represents a Student in the classroom */
 type Student = {
@@ -15,66 +15,51 @@ interface SettingsPageProps {
 }
 
 export default function SettingsPage({ params }: SettingsPageProps) {
+  // 1) Use the hook:
   const router = useRouter();
-  const [classroomId, setClassroomId] = useState<number | null>(null);
- 
+  const { classroomId, isLoading, error, isClassroomValid } =
+    useClassroomAuth(params);
 
-  // Unwrap the params Promise
-  useEffect(() => {
-    params.then((resolvedParams) => {
-      const classroomId = parseInt(resolvedParams.classroomId, 10);
-      console.log("Classroom ID from URL:", classroomId);
-      setClassroomId(classroomId);
-    });
-  }, [params]);
-
-  if (classroomId !== null && Number.isNaN(classroomId)) {
-    return <div>Invalid classroom ID</div>;
-  }
-
-  const fields = ["id"];
-  const { data, isLoading, error } = useListClassroomsQuery({ fields });
-
-  useEffect(() => {
-    if (!isLoading && data && classroomId !== null) {
-      const isValid = data.some((c: { id: number }) => c.id === classroomId);
-      if (!isValid) {
-        router.push("/unauthorized");
-      }
-    }
-  }, [classroomId, data, isLoading, router]);
-
+  // 2) Local states for rename, removing students, etc.
   const [className, setClassName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStudents, setSelectedStudents] = useState<number[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  // 3) Handle classroomId parse errors
+  if (classroomId !== null && Number.isNaN(classroomId)) {
+    return <div>Invalid classroom ID</div>;
+  }
+
+  // 4) If still loading (RTK Query or param), show a spinner
   if (classroomId === null || isLoading) {
     return <div>Loading...</div>;
   }
 
+  // 5) If request had an error (like 401), show an error
   if (error) {
     console.error("Error fetching classrooms:", error);
     return <div>Failed to load data. Maybe not authorized?</div>;
   }
 
-  const isClassroomValid = data?.some(
-    (c: { id: number }) => c.id === classroomId
-  );
-  if (!isClassroomValid) {
+  // 6) If the user doesn't have the ID, the hook already redirected
+  // but we might check isClassroomValid === false and show something.
+  // If "null", not determined yet, but typically we handle in effect.
+  if (isClassroomValid === false) {
     return <div>Loading...</div>;
   }
 
+  // If we get here, isClassroomValid is true
   // Sample data for demonstration
   const students: Student[] = [
     { id: 1, name: "Student 1" },
     { id: 2, name: "Student 2" },
     { id: 3, name: "Student 3" },
     { id: 4, name: "Student 4" },
-    // ...more
+    // ... more
   ];
 
-  // Filter students by search term
+  // Filter logic
   const filteredStudents = students.filter((student) =>
     student.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -86,8 +71,8 @@ export default function SettingsPage({ params }: SettingsPageProps) {
 
   const handleRenameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: Implement rename logic, e.g. call an API endpoint
     console.log("Renaming classroom to:", className);
+    // TODO: call your rename API
   };
 
   /* ---------------- REMOVE STUDENTS ---------------- */
@@ -100,7 +85,6 @@ export default function SettingsPage({ params }: SettingsPageProps) {
   };
 
   const handleSelectAll = () => {
-    // If all are already selected, clear them, else select all.
     if (selectedStudents.length === students.length) {
       setSelectedStudents([]);
     } else {
@@ -113,22 +97,22 @@ export default function SettingsPage({ params }: SettingsPageProps) {
   };
 
   const handleSave = () => {
-    // TODO: Implement removal logic (e.g. remove selected students)
     console.log("Removing students with IDs:", selectedStudents);
+    // TODO: call your remove-students API
   };
 
   /* ---------------- DELETE CLASSROOM ---------------- */
   const handleDeleteClassroom = () => {
-    // Display the confirmation modal
     setShowDeleteModal(true);
   };
 
   const confirmDeleteClassroom = () => {
-    // TODO: Implement deletion logic
     console.log("Classroom deleted.");
+    // TODO: call your delete API
     setShowDeleteModal(false);
   };
 
+  // 7) Render the full page once authorized & loaded
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Classroom Settings</h1>
