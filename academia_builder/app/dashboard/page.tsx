@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import useJoinStudent from "@/hooks/use-join-student";
 
 export default function DashboardPage() {
-  const { data: classrooms, isLoading, error, refetch } = useListClassroomsQuery();
+  const fields = ["id", "name", "course"];
+  const { data: classrooms, isLoading, error, refetch } = useListClassroomsQuery({fields});
   const accountType = useSelector((state: RootState) => state.auth.accountType);
   const router = useRouter();
   const { isLoading: isJoining, onSubmit } = useJoinStudent();

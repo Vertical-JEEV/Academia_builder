@@ -28,6 +28,10 @@ interface Classroom {
   unique_code: string;
 }
 
+interface ListClassroomsArgs {
+  fields: string[];
+}
+
 const classroomApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createClassroom: builder.mutation<void, CreateClassroomArgs>({
@@ -68,8 +72,14 @@ const classroomApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    listClassrooms: builder.query<Classroom, void>({
-      query: () => `/classroom/list-classrooms/`,
+    listClassrooms: builder.query<Classroom, ListClassroomsArgs>({
+      query: ({fields}) => {
+        const queryString = `fields=${fields.join(",")}`;
+        return {
+          url: `/classroom/list-classrooms/?${queryString}`,
+          method: "GET",
+        };
+      }
     }),
   }),
 });
