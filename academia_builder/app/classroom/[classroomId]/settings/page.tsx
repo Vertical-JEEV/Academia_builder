@@ -1,118 +1,45 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useClassroomAuth } from "@/hooks"; // <--- your new custom hook
-
-/** Represents a Student in the classroom */
-type Student = {
-  id: number;
-  name: string;
-};
+import { useClassroomAuth } from "@/hooks";
+import { Spinner } from "@/components/common";
+import { useClassroomSettings } from "@/hooks";
 
 interface SettingsPageProps {
   params: Promise<{ classroomId: string }>;
 }
 
 export default function SettingsPage({ params }: SettingsPageProps) {
-  // 1) Use the hook:
-  const router = useRouter();
-  const { classroomId, isLoading, error, isClassroomValid } =
-    useClassroomAuth(params);
+  const {
+    classroomId,
+    isLoading: authLoading,
+    error: authError,
+    isClassroomValid,
+  } = useClassroomAuth(params);
 
-  // 2) Local states for rename, removing students, etc.
-  const [className, setClassName] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStudents, setSelectedStudents] = useState<number[]>([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const {
+    className,
+    searchTerm,
+    selectedStudents,
+    showDeleteModal,
+    students,
+    filteredStudents,
+    isLoading,
+    error,
+    handleStudentSelect,
+    handleSelectAll,
+    handleSave,
+    handleRenameSubmit,
+    handleRenameChange,
+    handleSearchChange,
+    handleDeleteClassroom,
+    confirmDeleteClassroom,
+    setShowDeleteModal,
+  } = useClassroomSettings(classroomId);
 
-  // 3) Handle classroomId parse errors
-  if (classroomId !== null && Number.isNaN(classroomId)) {
-    return <div>Invalid classroom ID</div>;
-  }
+  if (authLoading || isLoading) return <Spinner lg />;
+  if (authError || error) return <div>Error loading classroom settings</div>;
+  if (!isClassroomValid) return <div>Invalid classroom</div>;
 
-  // 4) If still loading (RTK Query or param), show a spinner
-  if (classroomId === null || isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  // 5) If request had an error (like 401), show an error
-  if (error) {
-    console.error("Error fetching classrooms:", error);
-    return <div>Failed to load data. Maybe not authorized?</div>;
-  }
-
-  // 6) If the user doesn't have the ID, the hook already redirected
-  // but we might check isClassroomValid === false and show something.
-  // If "null", not determined yet, but typically we handle in effect.
-  if (isClassroomValid === false) {
-    return <div>Loading...</div>;
-  }
-
-  // If we get here, isClassroomValid is true
-  // Sample data for demonstration
-  const students: Student[] = [
-    { id: 1, name: "Student 1" },
-    { id: 2, name: "Student 2" },
-    { id: 3, name: "Student 3" },
-    { id: 4, name: "Student 4" },
-    // ... more
-  ];
-
-  // Filter logic
-  const filteredStudents = students.filter((student) =>
-    student.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  /* ---------------- RENAME CLASSROOM ---------------- */
-  const handleRenameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setClassName(e.target.value);
-  };
-
-  const handleRenameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Renaming classroom to:", className);
-    // TODO: call your rename API
-  };
-
-  /* ---------------- REMOVE STUDENTS ---------------- */
-  const handleStudentSelect = (studentId: number) => {
-    setSelectedStudents((prev) =>
-      prev.includes(studentId)
-        ? prev.filter((id) => id !== studentId)
-        : [...prev, studentId]
-    );
-  };
-
-  const handleSelectAll = () => {
-    if (selectedStudents.length === students.length) {
-      setSelectedStudents([]);
-    } else {
-      setSelectedStudents(students.map((s) => s.id));
-    }
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleSave = () => {
-    console.log("Removing students with IDs:", selectedStudents);
-    // TODO: call your remove-students API
-  };
-
-  /* ---------------- DELETE CLASSROOM ---------------- */
-  const handleDeleteClassroom = () => {
-    setShowDeleteModal(true);
-  };
-
-  const confirmDeleteClassroom = () => {
-    console.log("Classroom deleted.");
-    // TODO: call your delete API
-    setShowDeleteModal(false);
-  };
-
-  // 7) Render the full page once authorized & loaded
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Classroom Settings</h1>
@@ -166,35 +93,30 @@ export default function SettingsPage({ params }: SettingsPageProps) {
           <input
             type="checkbox"
             className="mr-2"
-            checked={
-              selectedStudents.length === students.length && students.length > 0
-            }
+            checked={selectedStudents.length === students.length && students.length > 0}
             onChange={handleSelectAll}
           />
           <span className="select-none">Select All</span>
         </label>
 
-        {/* Student Cards in a Responsive Grid */}
+        {/* Student Cards Grid */}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          {filteredStudents.map((student) => {
-            const isChecked = selectedStudents.includes(student.id);
-            return (
-              <div
-                key={student.id}
-                className="border border-gray-200 rounded-lg p-4 flex items-center hover:shadow-md transition-shadow"
-              >
-                <input
-                  type="checkbox"
-                  className="mr-2 h-5 w-5 accent-blue-600"
-                  checked={isChecked}
-                  onChange={() => handleStudentSelect(student.id)}
-                />
-                <label className="cursor-pointer select-none">
-                  {student.name}
-                </label>
-              </div>
-            );
-          })}
+          {filteredStudents.map((student) => (
+            <div
+              key={student.id}
+              className="border border-gray-200 rounded-lg p-4 flex items-center hover:shadow-md transition-shadow"
+            >
+              <input
+                type="checkbox"
+                className="mr-2 h-5 w-5 accent-blue-600"
+                checked={selectedStudents.includes(student.id)}
+                onChange={() => handleStudentSelect(student.id)}
+              />
+              <label className="cursor-pointer select-none">
+                {student.full_name}
+              </label>
+            </div>
+          ))}
         </div>
 
         {/* Save Button */}
@@ -206,7 +128,7 @@ export default function SettingsPage({ params }: SettingsPageProps) {
         </button>
       </div>
 
-      {/* Delete Classroom Section (Danger Zone) */}
+      {/* Delete Classroom Section */}
       <div className="bg-white shadow rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-4 text-red-600">Danger Zone</h2>
         <p className="text-gray-600 mb-4">

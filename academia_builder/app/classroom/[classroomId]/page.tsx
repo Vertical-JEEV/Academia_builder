@@ -3,6 +3,7 @@ import { useClassroomAuth } from "@/hooks"; // or "@/hooks/useClassroomAuth"
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/common";
 
 interface ClassroomPageProps {
   // The incoming param is still a Promise in your usage
@@ -28,7 +29,11 @@ export default function ClassroomPage({ params }: ClassroomPageProps) {
   }
 
   if (isLoading) {
-    return <div>Loading classrooms...</div>;
+    return (
+      <div className="flex justify-center my-8">
+        <Spinner lg />
+      </div>
+    );
   }
 
   if (error) {
@@ -38,7 +43,11 @@ export default function ClassroomPage({ params }: ClassroomPageProps) {
 
   // isClassroomValid might be false or null. If false, we already redirect.
   if (isClassroomValid === null) {
-    return <div>Checking authorization...</div>;
+    return (
+      <div className="flex justify-center my-8">
+        <Spinner lg />
+      </div>
+    );
   }
 
   // If we get here, user can access the classroom
