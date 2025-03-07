@@ -10,3 +10,4 @@ export { default as useSocialAuth } from "./use-social-auth";
 export { default as useCreateClassroom } from "./use-create-classroom";
 export { default as useJoinStudent } from "./use-join-student";
 export { useClassroomAuth } from "./use-classroom-auth";
+export { useClassroomSettings } from "./use-classroom-settings";

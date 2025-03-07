@@ -18,7 +18,7 @@ interface JoinStudentArgs {
 
 interface RemoveStudentArgs {
   classroom_id: number;
-  student_id: number;
+  student_ids: number[];
 }
 
 interface Classroom {
@@ -66,9 +66,10 @@ const classroomApiSlice = apiSlice.injectEndpoints({
     }),
 
     removeStudent: builder.mutation<void, RemoveStudentArgs>({
-      query: ({ classroom_id, student_id }) => ({
-        url: `/classroom/${classroom_id}/remove/${student_id}/`,
+      query: ({ classroom_id, student_ids }) => ({
+        url: `/classroom/${classroom_id}/remove-students/`,
         method: "DELETE",
+        body: { student_ids },
       }),
     }),
 
