@@ -33,7 +33,7 @@ SECRET_KEY = getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # set DEBUG to True if DJANGO_DEBUG is set to True in the .env file
-DEBUG = getenv('DJANGO_DEBUG', 'True') == 'True'
+DEBUG = getenv('DJANGO_DEBUG', 'False') == 'True'
 
 
 ALLOWED_HOSTS = getenv('DJANGO_ALLOWED_HOSTS',
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework',  # provides a framework for building Web APIs
     'djoser',  # provides a set of views to handle basic actions such as registration, login, logout, password reset and account activation
     'social_django',  # allows users to sign in with their social media accounts
+    'django_celery_beat',  # allows us to schedule tasks
     'users',  # the app we created to handle user accounts
     'classroom',  # the app we created to handle classrooms
     'courses',  # the app we created to handle courses
@@ -89,19 +90,26 @@ TEMPLATES = [
     },
 ]
 
+
+# redis cache settings
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',  # Use `redis://`, not `http://`
+        'LOCATION': 'redis://redis_db:6379/1',  # Use `redis://`, not `http://`
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
 }
 
+# celery settings
 
-
-
+CELERY_BROKER_URL = 'redis://redis_db:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis_db:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/London'
 
 
 
@@ -168,9 +176,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 
-TIME_ZONE = 'UTC'
-
-
+TIME_ZONE = 'Europe/London'
 USE_I18N = True
 
 USE_TZ = True
@@ -237,10 +243,7 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-
-    # 'social_core.pipeline.user.create_user',  # DISABLED!
-
-    'users.pipeline.store_temporary_user',     # <-- Your custom step
+    'users.pipeline.store_temporary_user',     # store the temporary user
 ]
 
 

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "@/redux/hooks";
-import { setAuth, finishInitialLoad } from "@/redux/features/authSlice";
+import { setAuth, finishInitialLoad, setAccountType } from "@/redux/features/authSlice";
 import { useVerifyMutation } from "@/redux/features/authApiSlice";
 
 export default function useVerify() {
@@ -9,8 +9,9 @@ export default function useVerify() {
   useEffect(() => {
     verify(undefined)
       .unwrap()
-      .then((data) => {
+      .then((response) => {
         dispatch(setAuth());
+        dispatch(setAccountType(response.account_type));
       })
       .catch(() => {
         dispatch(finishInitialLoad());

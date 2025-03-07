@@ -14,6 +14,7 @@ from rest_framework_simplejwt.views import (
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from .exceptions import NewUserException
+from .serializers import CustomTokenObtainPairSerializer, CustomTokenVerifySerializer
 
 
 import logging
@@ -21,11 +22,13 @@ import logging
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
+
 class CompleteSignupView(APIView):
-    
+
     permission_classes = [AllowAny]
+
     def post(self, request, *args, **kwargs):
-       
+
         # "signup_token" or "token" from the front end
         token = request.data.get("token")
         account_type = request.data.get("account_type")
@@ -76,7 +79,9 @@ class CompleteSignupView(APIView):
         refresh_token = str(refresh)
 
         response = Response(
-            {"message": "User registration completed."}, status=status.HTTP_201_CREATED)
+            {"message": "User registration completed.",
+             "account_type": account_type
+             }, status=status.HTTP_201_CREATED)
         response.set_cookie(
             "access", access_token,
             max_age=settings.AUTH_COOKIE_ACCESS_MAX_AGE,
@@ -101,9 +106,13 @@ class CustomProviderAuthView(ProviderAuthView):
         try:
             response = super().post(request, *args, **kwargs)
             # If user is authenticated, set JWT tokens as cookies
+            logger.debug(f"{response.data}\n")
             if response.status_code == 201:
                 access_token = response.data.get('access')
                 refresh_token = response.data.get('refresh')
+                email = response.data.get('user')
+                user = User.objects.get(email=email)
+                account_type = user.account_type
 
                 response.set_cookie(
                     'access',
@@ -124,22 +133,23 @@ class CustomProviderAuthView(ProviderAuthView):
                     httponly=settings.AUTH_COOKIE_HTTP_ONLY,
                     samesite=settings.AUTH_COOKIE_SAMESITE
                 )
+                response.data['account_type'] = account_type
             return response
         except NewUserException as e:
 
-           
             return Response(
-                {'is_new': True,'token':str(e)},
+                {'is_new': True, 'token': str(e)},
                 status=status.HTTP_200_OK
             )
-    
-
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
     def post(self, request, *args, **kwargs):
-        
+
         response = super().post(request, *args, **kwargs)
+        # logger.debug(f"{response.data}\n")
 
         # if the response status code is 200, then we set the access and refresh tokens as cookies
         if response.status_code == 200:
@@ -167,11 +177,11 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             )
 
             return response
-        
 
 
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
+        print("refrsh endpoint called")
         refresh_token = request.COOKIES.get('refresh')
 
         # if the refresh token is present in the request, then we set it as a cookie
@@ -198,6 +208,8 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 
 class CustomTokenVerifyView(TokenVerifyView):
+    serializer_class = CustomTokenVerifySerializer
+
     def post(self, request, *args, **kwargs):
         # if the access token is present in the request, then we set it as a cookie
 
