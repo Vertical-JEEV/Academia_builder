@@ -12,7 +12,6 @@ TEACHER_ALLOWED_FIELDS = {
     'id',
     'name',
     'teacher',
-    'teacher_name',
     'students',
     'course',
     'unique_code',
@@ -21,7 +20,6 @@ TEACHER_ALLOWED_FIELDS = {
 STUDENT_ALLOWED_FIELDS = {
     'id',
     'name',
-    'teacher_name',
     'course',
 }
 
@@ -154,19 +152,28 @@ class RemoveStudentView(APIView):
 # removes a student from a classroom
 
 
-    def delete(self, request, classroom_id, student_id):
+    def delete(self, request, classroom_id):
         try:
             classroom = Classroom.objects.get(id=classroom_id)
-            # if the teacher is not the owner of the classroom, then return an error else we remove the student from the classroom and return a success message
             if classroom.teacher != request.user:
                 return Response({"error": "Not authorized"}, status=403)
-            student = User.objects.get(id=student_id)
-            classroom.students.remove(student)
-            return Response({"message": f"Removed student with id {student_id} from classroom with id {classroom_id}"}, status=200)
+
+            student_ids = request.data.get('student_ids', [])
+            if not student_ids:
+                return Response({"error": "Student IDs are required"}, status=400)
+
+            students = User.objects.filter(id__in=student_ids)
+            if not students.exists():
+                return Response({"error": "No valid students found"}, status=404)
+
+            for student in students:
+                classroom.students.remove(student)
+
+            return Response({"message": f"Removed students with ids {student_ids} from classroom with id {classroom_id}"}, status=200)
         except Classroom.DoesNotExist:
             return Response({"error": "Classroom not found"}, status=404)
         except User.DoesNotExist:
-            return Response({"error": "Student not found"}, status=404)
+            return Response({"error": "One or more students not found"}, status=404)
 
 
 class JoinClassroomView(APIView):
