@@ -5,7 +5,7 @@ from users.authentication import CustomJWTAuthentication
 from users.models import UserAccount as User
 from .models import Classroom
 from .serializers import ClassroomSerializer
-from academia_builder.custom_permissions import IsTeacher, IsStudent, IsTeacherOrStudent
+from common.permissions import IsTeacher, IsStudent, IsTeacherOrStudent
 
 
 TEACHER_ALLOWED_FIELDS = {

@@ -4,8 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from users.authentication import CustomJWTAuthentication
 from django.db.models import Q  # allows for complex queries
 from .models import Course, Module, Question
+from classroom.models import Classroom
+from django.shortcuts import get_object_or_404
 from .serializers import CourseSerializer, ModuleSerializer, QuestionSerializer
-from academia_builder.custom_permissions import IsTeacherOrStudent
+from common.permissions import IsTeacherOrStudent
 
 
 class ListCoursesView(APIView):
@@ -25,11 +27,21 @@ class RetrieveModulesAndSubTopicsView(APIView):
     permission_classes = [IsAuthenticated, IsTeacherOrStudent]
 
     # get request to retrieve  all of the modules and sub-topics of a course
-    def get(self, request, course_id):
-        modules = Module.objects.filter(course_id=course_id)
+    def get(self, request, pk):
+        object_type = request.query_params.get("type")
+
+        if object_type == "classroom":
+            classroom = get_object_or_404(Classroom, id=pk)
+            course = classroom.course
+        elif object_type == "course":
+            course = get_object_or_404(Course, id=pk)
+        else:
+            return Response({"error": "Must specify ?type=course or ?type=classroom"}, status=400)
+
+        modules = Module.objects.filter(course=course)
         serializer = ModuleSerializer(modules, many=True)
         return Response(serializer.data)
-
+  
 
 class FilterQuestionsByModuleAndSubTopicView(APIView):
     authentication_classes = [CustomJWTAuthentication]
