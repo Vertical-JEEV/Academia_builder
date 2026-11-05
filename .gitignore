@@ -10,3 +10,15 @@ __pycache__/
 venv/
 
 
+
+# Sensitive files
+.env
+.env.*
+!.env.example
+academia_builder_api/testing_accounts_details.txt
+academia_builder_api/ses-smtp-user.*_accessKeys.csv
+academia_builder_api/db.sqlite3
+
+# Python environments
+.venv/
+venv/
