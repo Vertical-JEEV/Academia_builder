@@ -131,7 +131,7 @@ In another terminal, from the same directory, run the migrations, seed the datab
 ```bash
 docker-compose exec api_server python manage.py makemigrations
 docker-compose exec api_server python manage.py migrate
-docker compose exec api_server python manage.py loaddata testdata.json
+docker-compose exec api_server python manage.py loaddata testdata.json
 docker-compose restart
 docker-compose exec api_server python manage.py createsuperuser
 ```
