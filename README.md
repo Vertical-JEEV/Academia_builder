@@ -90,7 +90,7 @@ DJANGO_ALLOWED_HOSTS='127.0.0.1,localhost'
 DJANGO_CORS_ALLOWED_ORIGINS='http://localhost:3000,http://127.0.0.1:3000'
 REDIRECT_URLS='http://localhost:3000/auth/google,http://localhost:3000/auth/microsoft'
 DOMAIN='localhost:3000'
-AUTH_COOKIE_SECURE='False'
+AUTH_COOKIE_SECURE='True'
 
 # Redis: one instance, two logical databases
 REDIS_CACHE_URL='redis://redis_db:6379/0'
@@ -132,7 +132,7 @@ In another terminal, from the same directory, run the migrations, seed the datab
 docker-compose exec api_server python manage.py makemigrations
 docker-compose exec api_server python manage.py migrate
 docker-compose exec api_server python manage.py loaddata testdata.json
-docker-compose restart
+docker-compose up -d
 docker-compose exec api_server python manage.py createsuperuser
 ```
 
@@ -166,27 +166,41 @@ Open `http://localhost:3000`.
 
 Standard email/password registration requires Amazon SES, while social login requires Google and/or Microsoft OAuth credentials.
 
-#### Amazon SES (Email Activation & Password Resets)
+#### [Amazon SES (Email Activation & Password Resets)](https://console.aws.amazon.com/console/home/?nc2=h_si&src=header-signin)
 
-1. **Verify an Identity:** In the [AWS SES Console](https://amazon.com), select your region (e.g., `eu-west-2`), go to **Identities**, and verify a sender email address (`AWS_SES_FROM_EMAIL`). _(Note: New accounts in the SES Sandbox can only send emails to verified addresses)._
-2. **Generate Credentials:** In the [AWS IAM Console](https://amazon.com), create a user with the **`AmazonSESFullAccess`** policy attached.
+1. **Verify an Identity:** In the AWS SES Console, select your region (e.g., `eu-west-2`), go to **Identities**, and verify a sender email address (`AWS_SES_FROM_EMAIL`). _(Note: New accounts in the SES Sandbox can only send emails to verified addresses)._
+2. **Generate Credentials:** In the AWS IAM Console, create a user with the **`AmazonSESFullAccess`** policy attached.
 3. Under the user's **Security credentials** tab, create an **Access key** (select _Local code_) and copy the `AWS_SES_ACCESS_KEY_ID` and `AWS_SES_SECRET_ACCESS_KEY` into `academia_builder_api/.env.local`.
 
 > **Local Alternative (No AWS Required):** To test registration without AWS, open `academia_builder_api/academia_builder/settings.py` and temporarily change `EMAIL_BACKEND` to `'django.core.mail.backends.console.EmailBackend'`. Activation and reset links will print directly in your Docker terminal.
 
-#### Google & Microsoft OAuth2 (Social Login)
-
 If you want to test the two-step OAuth onboarding flow, register an application in the respective developer consoles and add the matching redirect URIs from your `.env.local`:
 
-- **Google Cloud Console** (_APIs & Services > Credentials > Create OAuth Client ID_):
-  - **Authorized JavaScript origins:** `http://localhost:3000`
-  - **Authorized redirect URIs:** `http://localhost:3000/auth/google`
-  - Copy the **Client ID** (`GOOGLE_AUTH_KEY`) and **Client Secret** (`GOOGLE_AUTH_SECRET_KEY`).
+#### [Google Cloud Console](https://console.cloud.google.com/)
 
-- **Microsoft Entra / Azure Portal** (_App registrations > New registration_):
-  - **Platform:** Web
-  - **Redirect URI:** `http://localhost:3000/auth/microsoft`
-  - Copy the **Application (client) ID** (`MICROSOFT_AUTH_KEY`) and generate a value under _Certificates & secrets_ (`MICROSOFT_AUTH_SECRET_KEY`).
+1. **Create & Configure Project:** Click the project dropdown at the top-left, choose **New Project**, name it `Academia Builder`, and make sure it is selected. Once you're in your new project, press the **Get Started** button, enter an **App name** (e.g., `Academia Builder`), select your **User support email**, choose **External** for Audience, and enter your **Contact email**.
+2. **Create Credentials:** Go to **APIs & Services > + Create Credentials > OAuth client ID** and configure:
+   - **Application type:** `Web application`
+   - **Authorised JavaScript origins:** `http://localhost:3000`
+   - **Authorised redirect URIs:** `http://localhost:3000/auth/google`
+3. **Save Keys:** Copy the **Client ID** (`GOOGLE_AUTH_KEY`) and **Client Secret** (`GOOGLE_AUTH_SECRET_KEY`) into `academia_builder_api/.env.local`.
+4. **Add Yourself as a Test User:** New External apps remain in **Testing** mode by default, which blocks all logins unless the email is whitelisted. Go to **Audience**, click **+ Add users**, add the Gmail address you will test with locally, and click **Save** _(otherwise Google will return `Error 403: access_denied`)_.
+
+#### [Microsoft Entra / Azure Portal](https://azure.com)
+
+1. **Register Application:** Navigate to **Microsoft Entra ID > App registrations > + New registration**.
+   - **Name:** Enter an application name (e.g., `Academia Builder`).
+   - **Supported account types:** Select **Accounts in any organizational directory (Any Microsoft Entra ID tenant - Multitenant) and personal Microsoft accounts (e.g. Skype, Xbox)** so you can test with personal Outlook/Hotmail accounts.
+   - **Redirect URI:** Select **Web** from the dropdown, enter `http://localhost:3000/auth/microsoft`, and click **Register**.
+2. **Copy Client ID:** On the app's **Overview** page, copy the **Application (client) ID** (`MICROSOFT_AUTH_KEY`) into `academia_builder_api/.env.local`.
+3. **Generate Client Secret:** Go to **Certificates & secrets > Client secrets > + New client secret**, add a description, and click **Add**.
+4. **Save Secret Value:** Copy the secret's **Value** _(not the Secret ID)_ immediately and paste it as `MICROSOFT_AUTH_SECRET_KEY` in `academia_builder_api/.env.local`.
+
+> **Note:** Whenever you add or update values in `academia_builder_api/.env.local`, recreate your backend containers from `academia_builder_api/` so Docker injects the new environment variables:
+>
+> ```bash
+> docker-compose up -d
+> ```
 
 ---
 
