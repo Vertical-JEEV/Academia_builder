@@ -95,7 +95,7 @@ TEMPLATES = [
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redis_db:6379/1',  # Use `redis://`, not `http://`
+        'LOCATION': getenv('REDIS_CACHE_URL'),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -104,8 +104,8 @@ CACHES = {
 
 # celery settings
 
-CELERY_BROKER_URL = 'redis://redis_db:6379/0'
-CELERY_RESULT_BACKEND = 'redis://redis_db:6379/0'
+CELERY_BROKER_URL = getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = getenv('CELERY_BROKER_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -128,7 +128,7 @@ DATABASES = {
 }
 
 # email settings
-EMAIL_BACKEND = 'django_ses.SESBackend'  # use Amazon SES to send emails
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #'django_ses.SESBackend'  # use Amazon SES to send emails
 # the email address to send emails from
 DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
 

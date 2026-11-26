@@ -1,0 +1,467 @@
+{
+  "info": {
+    "name": "Auth Api Endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "endpoint to create an account",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"first_name\": \"Alex\",\n    \"last_name\": \"Taylor\",\n    \"email\": \"student@example.com\",\n    \"account_type\": \"teacher\",\n    \"password\": \"ExamplePassword123!\",\n    \"re_password\": \"ExamplePassword123!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/users/",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "endpoint to activate account( must go to email  once an account is created)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"uid\": \"YOUR_USER_UID\",\n    \"token\": \"YOUR_ACTIVATION_OR_RESET_TOKEN\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/users/activation/",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "activation",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "jwt user create( gives access and refresh token in a cookie) ie login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"student@example.com\",\n    \"password\": \"ExamplePassword123!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/jwt/create/",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "jwt",
+            "create",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "jwt user refresh(gives a new access token in the same cookie but refresh token stays the same)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/jwt/refresh/",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "jwt",
+            "refresh",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "jwt user verify(verifies if the  tokens in the cookies are valid)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"token\": \"YOUR_ACCESS_TOKEN\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/jwt/verify/",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "jwt",
+            "verify",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "retrieve users details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/api/users/me/",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "me",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "user logout",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/api/logout/",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "logout",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "request password reset",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"student@example.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/users/reset_password/",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "reset_password",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "password reset confirm",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"uid\": \"YOUR_USER_UID\",\n    \"token\": \"YOUR_PASSWORD_RESET_TOKEN\",\n    \"new_password\": \"NewExamplePassword123!\",\n    \"re_new_password\": \"NewExamplePassword123!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/users/reset_password_confirm/",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "reset_password_confirm",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "google oath2 get authorisation url",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/o/google-oauth2/?redirect_uri=http://localhost:3000/auth/google",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "o",
+            "google-oauth2",
+            ""
+          ],
+          "query": [
+            {
+              "key": "redirect_uri",
+              "value": "http://localhost:3000/auth/google"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Google post request",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/api/o/google-oauth2/?state=YOUR_OAUTH_STATE&code=YOUR_AUTH_CODE",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "o",
+            "google-oauth2",
+            ""
+          ],
+          "query": [
+            {
+              "key": "state",
+              "value": "YOUR_OAUTH_STATE"
+            },
+            {
+              "key": "code",
+              "value": "YOUR_GOOGLE_OR_MICROSOFT_AUTH_CODE"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Microsoft auth url",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/o/microsoft-graph/?redirect_uri=http://localhost:3000/auth/microsoft",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "o",
+            "microsoft-graph",
+            ""
+          ],
+          "query": [
+            {
+              "key": "redirect_uri",
+              "value": "http://localhost:3000/auth/microsoft"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Microsoft post request",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/api/o/microsoft-graph/?code=YOUR_AUTH_CODE&state=YOUR_OAUTH_STATE",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "o",
+            "microsoft-graph",
+            ""
+          ],
+          "query": [
+            {
+              "key": "code",
+              "value": "YOUR_GOOGLE_OR_MICROSOFT_AUTH_CODE"
+            },
+            {
+              "key": "state",
+              "value": "YOUR_OAUTH_STATE"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Complete signup view",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"token\": \"YOUR_SIGNUP_TOKEN\",\n    \"account_type\": \"student\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/api/complete-signup/",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "complete-signup",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": "http://localhost:8000",
+      "type": "default"
+    }
+  ]
+}

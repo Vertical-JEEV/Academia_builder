@@ -1,0 +1,92 @@
+{
+  "info": {
+    "name": "Course Api Endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "list the available courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/courses/list-courses/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "courses",
+            "list-courses",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "retrieve the modules and sub-topics of a course or classroom",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/courses/retrieve-topic-list/1/?type=course",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "courses",
+            "retrieve-topic-list",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "course"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "filter questions based on  different modules abd sub-topics",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/courses/filter-questions/2/?module_ids=2&subtopics_ids=3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "courses",
+            "filter-questions",
+            "2",
+            ""
+          ],
+          "query": [
+            {
+              "key": "module_ids",
+              "value": "2"
+            },
+            {
+              "key": "subtopics_ids",
+              "value": "3"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

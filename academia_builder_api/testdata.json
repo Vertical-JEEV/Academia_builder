@@ -1,0 +1,385 @@
+[
+  {
+    "model": "courses.course",
+    "pk": 1,
+    "fields": {
+      "name": "Computer Science 101",
+      "description": "Introduction to computer science concepts"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 2,
+    "fields": {
+      "name": "Mathematics 101",
+      "description": "Basic mathematics concepts"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 3,
+    "fields": {
+      "name": "Physics 101",
+      "description": "Introductory physics concepts"
+    }
+  },
+
+  {
+    "model": "courses.module",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "name": "Fundamentals"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 2,
+    "fields": {
+      "course": 1,
+      "name": "Algorithms"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 3,
+    "fields": {
+      "course": 2,
+      "name": "Numbers and Sets"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 4,
+    "fields": {
+      "course": 2,
+      "name": "Algebra Basics"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 5,
+    "fields": {
+      "course": 3,
+      "name": "Classical Mechanics"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 6,
+    "fields": {
+      "course": 3,
+      "name": "Electricity & Magnetism"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 7,
+    "fields": {
+      "course": 1,
+      "name": "Data Structures"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 8,
+    "fields": {
+      "course": 2,
+      "name": "Geometry"
+    }
+  },
+
+  {
+    "model": "courses.subtopic",
+    "pk": 1,
+    "fields": {
+      "module": 1,
+      "name": "CS History"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 2,
+    "fields": {
+      "module": 1,
+      "name": "Binary and Hex"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 3,
+    "fields": {
+      "module": 2,
+      "name": "Sorting Algorithms"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 4,
+    "fields": {
+      "module": 2,
+      "name": "Search Algorithms"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 5,
+    "fields": {
+      "module": 3,
+      "name": "Number Theory Basics"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 6,
+    "fields": {
+      "module": 3,
+      "name": "Sets & Venn Diagrams"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 7,
+    "fields": {
+      "module": 4,
+      "name": "Linear Equations"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 8,
+    "fields": {
+      "module": 4,
+      "name": "Quadratic Equations"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 9,
+    "fields": {
+      "module": 5,
+      "name": "Newton's Laws"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 10,
+    "fields": {
+      "module": 5,
+      "name": "Work & Energy"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 11,
+    "fields": {
+      "module": 6,
+      "name": "Electric Fields"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 12,
+    "fields": {
+      "module": 6,
+      "name": "Circuits"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 13,
+    "fields": {
+      "module": 7,
+      "name": "Stacks & Queues"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 14,
+    "fields": {
+      "module": 7,
+      "name": "Trees"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 15,
+    "fields": {
+      "module": 8,
+      "name": "Angles"
+    }
+  },
+  {
+    "model": "courses.subtopic",
+    "pk": 16,
+    "fields": {
+      "module": 8,
+      "name": "Coordinate Geometry"
+    }
+  },
+
+  {
+    "model": "courses.question",
+    "pk": 1,
+    "fields": {
+      "subtopic": 1,
+      "question_type": "MC",
+      "text": "Who is considered the father of computer science?",
+      "answer": "Alan Turing"
+    }
+  },
+  {
+    "model": "courses.question",
+    "pk": 2,
+    "fields": {
+      "subtopic": 2,
+      "question_type": "LA",
+      "text": "Explain how binary numbers are converted to hexadecimal numbers.",
+      "answer": "Divide the binary into groups of four bits..."
+    }
+  },
+  {
+    "model": "courses.question",
+    "pk": 3,
+    "fields": {
+      "subtopic": 5,
+      "question_type": "MC",
+      "text": "Which of these is NOT a prime number?",
+      "answer": ""
+    }
+  },
+  {
+    "model": "courses.question",
+    "pk": 4,
+    "fields": {
+      "subtopic": 7,
+      "question_type": "LA",
+      "text": "Describe the slope-intercept form of a linear equation.",
+      "answer": "The slope-intercept form is y = mx + b..."
+    }
+  },
+  {
+    "model": "courses.question",
+    "pk": 5,
+    "fields": {
+      "subtopic": 9,
+      "question_type": "MC",
+      "text": "Which law best describes inertia?",
+      "answer": ""
+    }
+  },
+  {
+    "model": "courses.question",
+    "pk": 6,
+    "fields": {
+      "subtopic": 10,
+      "question_type": "LA",
+      "text": "Discuss the concept of work-energy theorem.",
+      "answer": ""
+    }
+  },
+  {
+    "model": "courses.question",
+    "pk": 7,
+    "fields": {
+      "subtopic": 13,
+      "question_type": "LA",
+      "text": "What is a stack, and how does it differ from a queue?",
+      "answer": ""
+    }
+  },
+  {
+    "model": "courses.question",
+    "pk": 8,
+    "fields": {
+      "subtopic": 14,
+      "question_type": "MC",
+      "text": "Which tree traversal visits left-subtree, node, right-subtree in order?",
+      "answer": ""
+    }
+  },
+  {
+    "model": "courses.question",
+    "pk": 9,
+    "fields": {
+      "subtopic": 16,
+      "question_type": "LA",
+      "text": "Find the slope of the line passing through (2,3) and (6,11).",
+      "answer": ""
+    }
+  },
+
+  {
+    "model": "courses.multiplechoiceoption",
+    "pk": 1,
+    "fields": {
+      "question": 1,
+      "text": "Alan Turing",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "courses.multiplechoiceoption",
+    "pk": 2,
+    "fields": {
+      "question": 1,
+      "text": "Albert Einstein",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "courses.multiplechoiceoption",
+    "pk": 3,
+    "fields": {
+      "question": 3,
+      "text": "2",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "courses.multiplechoiceoption",
+    "pk": 4,
+    "fields": {
+      "question": 3,
+      "text": "4",
+      "is_correct": true
+    }
+  },
+
+  {
+    "model": "courses.multiplechoiceoption",
+    "pk": 5,
+    "fields": {
+      "question": 5,
+      "text": "Newton's First Law",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "courses.multiplechoiceoption",
+    "pk": 6,
+    "fields": {
+      "question": 5,
+      "text": "Newton's Third Law",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "courses.multiplechoiceoption",
+    "pk": 7,
+    "fields": {
+      "question": 8,
+      "text": "Preorder",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "courses.multiplechoiceoption",
+    "pk": 8,
+    "fields": {
+      "question": 8,
+      "text": "Inorder",
+      "is_correct": true
+    }
+  }
+]
