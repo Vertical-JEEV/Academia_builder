@@ -127,8 +127,8 @@ DATABASES = {
     }
 }
 
-# email settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #'django_ses.SESBackend'  # use Amazon SES to send emails
+# email settings, either use 'django.core.mail.backends.console.EmailBackend' if you dont have amazon ses setup else use 'django_ses.SESBackend' 
+EMAIL_BACKEND = 'django_ses.SESBackend'  
 # the email address to send emails from
 DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
 
